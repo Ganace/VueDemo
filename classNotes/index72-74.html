@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vue练习</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>第72-74课</q-toolbar-title>
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section class="text-secondary">
+              <div class="text-h6 text-secondary">{{ title }}</div>
+              <h6>前端模块化雏形和CommonJS</h6>
+              <ul>
+                <li>
+                  ES5写法
+                  <pre>
+(function(){
+  var flag = true
+})()
+                  </pre>
+                </li>
+                <li>
+                  CommonJS(了解)
+                  <pre>
+导出
+module.exprots = {
+  flag: true,
+  test(a,b){
+    return a + b
+  },
+  demo(a,b){
+    return a + b
+  },
+}
+导入
+// CommonJS模块
+let { test, demo, flag } = require('./a.js');
+// 等同于
+let _mA = require('./a.js');
+let test = _mA.test;
+let demo = _mA.demo;
+let flag = _mA.flag
+                  </pre>
+                </li>
+                <li>ES6模块化的导入和导出</li>
+              </ul>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+                  <div id="conslog"></div>
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+&lt;script src=&quot;../common/js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;div id=&quot;app&quot;&gt;
+&lt;div id=&quot;conslog&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+// ----ES5写法 ----
+// 模块
+var moduleA = (function(){
+  var obj = {};
+  var flag = true;
+  function sum(num1,num2){
+    return num1 + num2;
+  }
+  obj.flag = flag;
+  obj.sum = sum;
+  return obj
+})()
+// 使用
+;(function(){
+  document.getElementById(&#x27;conslog&#x27;).innerHTML = moduleA.flag + &#x27;---&#x27; + moduleA.sum(10,35);
+  console.log(moduleA.flag);
+  console.log(moduleA.sum(10,35));
+})()
+&lt;/script&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+  // ----ES6写法 ----
+// [[[a.js文件内容]]]
+/*
+var flag = true;
+function sum(num1,num2){
+  return num1 + num2;
+}
+//1.导出方式一：
+export {
+  flag,sum
+}
+//2.导出方式二：
+export var num1 = 1.18;
+export var num2 = 233;
+//3.导出函数/类
+export function mul( num1, num2 ){
+  return num1 + num2
+}
+export class Person{
+  run(){
+    console.log(&#x27;run&#x27;);
+  }
+}
+//4.export default
+// export default在同一个模块中，不允许同时存在多个
+const address = &#x27;beijing&#x27;
+export default function (argument) {
+  console.log(argument);
+}
+*/
+// [[[b.js文件内容]]]
+/*
+//1.导入{}中定义的变量
+import { flag, sum } from &quot;./aaa.js&quot;;
+if(flag){
+  console.log(flag);
+  console.log(sum( 200 + 40 ))
+}
+//2.直接导入export定义的变量
+import {num1, num2} from &quot;./aaa.js&quot;;
+console.log(num1);
+console.log(num2);
+//3.导入export的function/class
+import {mul, Person} from &quot;./a.js&quot;;
+console.log(mul(30,50))
+const p = new Person;
+p.run()
+//4.export default 导出,自命名
+import ads from &quot;./aaa.js&quot;;
+ads(&#x27;hello&#x27;);
+*/
+// [[[import使用]]]
+// 首先，需要在html代码中引入两个文件，并且类型需要设置为module
+// a.js文件,b.js文件件引入。成为了单独的模块，而单独的模块有自己的作用域。
+// &lt;script src=&quot;a.js&quot; type=&quot;module&quot;&gt;&lt;\/script&gt;
+// &lt;script src=&quot;b.js&quot; type=&quot;module&quot;&gt;&lt;\/script&gt;
+// import指令用于导入模块中的内容,比如
+// import {name, age, height} from &quot;./a.js&quot;
+// import 统一全部导入
+// import * as aaa from &#x27;./a.js&#x27;
+// console.log(name, age, height)
+&lt;/script&gt;
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+    </template>
+  </div>
+  <script type="text/javascript">
+    const app = new Vue({
+      el: '#app',
+      data: {
+        tab: 'show',
+        title: '第72-74课 模块化开发基础',
+        messages: [
+          '',
+        ],
+      }
+    });
+  </script>
+  <script>
+    // ----ES5写法 ----
+    // 模块
+    var moduleA = (function () {
+      var obj = {};
+      var flag = true;
+
+      function sum(num1, num2) {
+        return num1 + num2;
+      }
+      obj.flag = flag;
+      obj.sum = sum;
+      return obj
+    })()
+    // 使用
+    ;
+    (function () {
+      document.getElementById('conslog').innerHTML = moduleA.flag + '---' + moduleA.sum(10, 35);
+      console.log(moduleA.flag);
+      console.log(moduleA.sum(10, 35));
+    })()
+  </script>
+  <script type="module">
+    // ----ES6写法 ----
+// [[[a.js文件内容]]]
+/*
+var flag = true;
+function sum(num1,num2){
+  return num1 + num2;
+}
+//1.导出方式一：
+export {
+  flag,sum
+}
+//2.导出方式二：
+export var num1 = 1.18;
+export var num2 = 233;
+//3.导出函数/类
+export function mul( num1, num2 ){
+  return num1 + num2
+}
+export class Person{
+  run(){
+    console.log('run');
+  }
+}
+//4.export default
+// export default在同一个模块中，不允许同时存在多个
+const address = 'beijing'
+export default function (argument) {
+  console.log(argument);
+}
+*/
+// [[[b.js文件内容]]]
+/*
+//1.导入{}中定义的变量
+import { flag, sum } from "./aaa.js";
+if(flag){
+  console.log(flag);
+  console.log(sum( 200 + 40 ))
+}
+//2.直接导入export定义的变量
+import {num1, num2} from "./aaa.js";
+console.log(num1);
+console.log(num2);
+//3.导入export的function/class
+import {mul, Person} from "./a.js";
+console.log(mul(30,50))
+const p = new Person;
+p.run()
+//4.export default 导出,自命名
+import ads from "./aaa.js";
+ads('hello');
+*/
+// [[[import使用]]]
+// 首先，需要在html代码中引入两个文件，并且类型需要设置为module
+// a.js文件,b.js文件件引入。成为了单独的模块，而单独的模块有自己的作用域。
+// <script src="a.js" type="module"><\/script>
+// <script src="b.js" type="module"><\/script>
+// import指令用于导入模块中的内容,比如
+// import {name, age, height} from "./a.js"
+// import 统一全部导入
+// import * as aaa from './a.js'
+// console.log(name, age, height)
+</script>
+</body>
+
+</html>

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vue练习</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>第99-115课 vue-router[安装配置使用，router-link，懒加载，路由嵌套，参数传递，router和route，导航守卫]</q-toolbar-title>
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section class="text-secondary">
+              <div class="text-h6 text-secondary">{{ title }}</div>
+              <h6>什么是路由和其中映射关系</h6>
+              <h6>前端渲染后端渲染和前端路由后端路由</h6>
+              <ul>
+                <li>
+                  后端路由阶段
+                  <ul>
+                    <li>后端渲染：早期jsp(java server page)</li>
+                    <li>后端路由：后端处理URL和页面之间的映射关系</li>
+                  </ul>
+                </li>
+                <li>
+                  前后端分离阶段
+                  <ul>
+                    <li>Ajax,API</li>
+                    <li>后端只负责提供数据，不负责任何阶段的内容</li>
+                    <li>前端渲染：浏览器中显示的网页中的大部分内容，都是由前端写的js代码在浏览器中执行，最终渲染出来的网页</li>
+                  </ul>
+                </li>
+                <li>
+                  单页面富应用(SPA)阶段
+                  <ul>
+                    <li>SPA页面：整个网站只有一个html</li>
+                    <li>前端路由：前端管理url和页面之间的映射关系</li>
+                    <li>其实SPA最主要的特点就是在前后端分离的基础上加了一层前端路由</li>
+                    <li>也就是前端来维护一套路由规则</li>
+                  </ul>
+                </li>
+                <li>前端路由的核心是：改变url，但是页面不进行整体的刷新</li>
+              </ul>
+              <h6>url的hash和HTML5的history</h6>
+              <ul>
+                <li>
+                  url的hash
+                  <ul>
+                    <li><code>location.hash = 'aaa'</code></li>
+                  </ul>
+                </li>
+                <li>
+                  HTML5的history，栈结构
+                  <ul>
+                    <li>
+                      1.history.pushState()
+                      <ul>
+                        <li>
+                          入栈
+                          <code>history.pushState({}, '', '/foo')</code>
+                        </li>
+                        <li>
+                          出栈
+                          <code>history.back()</code>
+                        </li>
+                      </ul>
+                    </li>
+                    <li>
+                      2.history.replaceState()
+                      <ul>
+                        <li><code>history.replaceState({}, '', 'home')</code></li>
+                        <li>此时返回history.back()无效，不能返回</li>
+                      </ul>
+                    </li>
+                    <li>
+                      3.history.go()
+                      <ul>
+                        <li><code>history.back()</code>等价于<code>history.go(-1)</code></li>
+                        <li><code>history.forward()</code>则等价于<code>history.go(1)</code></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+              <h6>vue-router安装和配置</h6>
+              <ul>
+                <li>
+                  步骤一、安装
+                  <ul>
+                    <li><code>npm install vue-router --save</code></li>
+                  </ul>
+                </li>
+                <li>
+                  步骤二、在模块化工程中使用它
+                  <ul>
+                    <li>1.创建路由组件Home.vue,About.vue</li>
+                    <li>
+                      配置路由映射: src\router\index.js
+                      <pre>
+// 配置路由相关信息
+import Vue from 'vue'
+import Router from 'vue-router'
+import HelloWorld from '@/components/HelloWorld'
+
+// 1.通过Vue.use（插件），安装插件
+Vue.use(Router)
+
+// 2.new创建Router对象 3.export default将router对象传入到Vue实例
+export default new Router({
+  // 配置路由和组件的映射关系
+  routes: [
+    {
+      path: '/',
+      name: 'HelloWorld',
+      component: HelloWorld
+    }
+  ]
+})
+                      </pre>
+                    </li>
+                    <li>
+                      使用路由：通过<code>&lt;router-link
+                        to=&quot;/about&quot;&gt;&lt;/router-link&gt;</code>和<code>&lt;router-view/&gt;</code>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+              <h6>路由的默认值和修改为history模式</h6>
+              <ul>
+                <li>
+                  路由默认值配置
+                  <pre>
+export default new Router({
+  // 配置路由和组件的映射关系
+  routes: [
+    {
+      path: '',//或者'/'
+      //redirect重定向
+      redirect: '/home'
+    }
+  ]
+})
+                  </pre>
+                </li>
+                <li>
+                  修改为history模式
+                  <pre>
+export default new Router({
+  // 配置路由和组件的映射关系
+  routes: [
+  // ...
+  ],
+  mode: 'history'
+})
+                  </pre>
+                </li>
+              </ul>
+              <h6>router-link的其他属性补充</h6>
+              <ul>
+                <li><code>to="/home"</code>用于指定跳转路径</li>
+                <li><code>tag="button"</code>指定渲染成什么组件，例：tag="li"</li>
+                <li><code>replace</code>修改默认history.pushState()模式为history.replaceState()模式</li>
+                <li>
+                  <code>active-class="active"</code>当router-link对应的路由配对成功时，会自动给当前元素设置一个router-link-active的class，设置active-class可以修改默认的名称
+                </li>
+                <li>
+                  统一修改active-class，在src\router\index.js中配置
+                  <pre>
+export default new Router({
+  linkActiveClass: 'active'
+})
+                  </pre>
+                </li>
+              </ul>
+              <h6>通过代码跳转路由</h6>
+              <ul>
+                <li>
+                  <pre>
+&lt;button @click=&quot;homeClick&quot;&gt;首页按钮&lt;/button&gt;
+                  </pre>
+                </li>
+                <li>
+                  <pre v-pre>
+export default {
+  name: &#x27;App&#x27;,
+  methods: {
+    homeClick(){
+      this.$router.push(&#x27;/home&#x27;)
+    }
+  },
+}
+                  </pre>
+                </li>
+              </ul>
+              <h6>vue-router动态路由的使用</h6>
+              <ul>
+                <li>
+                  <pre>
+export default new Router({
+  // 配置路由和组件的映射关系
+  routes: [
+    {
+      path: &#x27;/user/:userId&#x27;,
+      component: User
+    }
+  ]
+})
+                  </pre>
+                </li>
+                <li>
+                  <pre v-pre>
+&lt;template&gt;
+  &lt;div id=&quot;app&quot;&gt;
+    &lt;router-link :to=&quot;&#x27;user/&#x27;+userId&quot;&gt;用户&lt;/router-link&gt;
+    &lt;h5&gt;{{$route.params.userId}}&lt;/h5&gt;
+    &lt;h5&gt;{{userId}}&lt;/h5&gt;
+    &lt;router-view/&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default {
+  name: &#x27;App&#x27;,
+  data() {
+    return {
+      userId: &#x27;LiSi&#x27;
+    }
+  },
+  computed: {
+    userId(){
+      return this.$route.params.userId;
+    }
+  },
+}
+&lt;/script&gt;
+                  </pre>
+                </li>
+              </ul>
+              <h6>vue-router打包文件的解析</h6>
+              <h6>vue-router路由的懒加载的使用</h6>
+              <ul>
+                <li>
+                  <pre>
+const About = () =&gt; import(&#x27;../components/About.vue&#x27;)
+export default new Router({
+  // 配置路由和组件的映射关系
+  routes: [
+    {
+      path: &#x27;/about&#x27;,
+      //路由懒加载
+      component: About
+    }
+  ]
+})
+                  </pre>
+                </li>
+              </ul>
+              <h6>vue-router路由嵌套的使用</h6>
+              <ul>
+                <li>
+                  <pre>
+import Home from &#x27;../components/Home.vue&#x27;
+const HomeNews = () =&gt; import(&#x27;../components/HomeNews.vue&#x27;)
+const HomeMessages = () =&gt; import(&#x27;../components/HomeMessages.vue&#x27;)
+Vue.use(Router)
+export default new Router({
+  // 配置路由和组件的映射关系
+  routes: [
+    {
+      path: &#x27;/home&#x27;,
+      component: Home,
+      children: [
+        {
+          path: &#x27;&#x27;,
+          component: HomeNews
+        },
+        {
+          path: &#x27;news&#x27;,
+          component: HomeNews
+        },
+        {
+          path: &#x27;messages&#x27;,
+          component: HomeMessages
+        }
+      ]
+    }
+})
+
+                  </pre>
+                </li>
+              </ul>
+              <h6>vue-router参数传递</h6>
+              <ul>
+                <li>Profile->档案（用户个人中心）</li>
+                <li>
+                  参数传递的方式一：params的类型
+                  <ul>
+                    <li>配置路由格式：<code>/router/:id</code> 取值：<code v-pre>{{$route.params.userId}}</code></li>
+                    <li>传递的方式：在path后面跟上对应的值</li>
+                    <li>传递后形成的路径:<code>/router/123,/router/abc</code></li>
+                  </ul>
+                </li>
+                <li>
+                  参数传递方式二：query类型
+                  <ul>
+                    <li>配置路由格式：<code>/router</code>，也就是普通配置</li>
+                    <li>传递的方式：对象中使用query的key作为传递方式</li>
+                    <li>传递后形成的路径：<code>/router?id=123,/router?id=abc</code></li>
+                    <li>
+                      <ul>
+                        <li>URL(协议://主机:端口/路径?查询)</li>
+                        <li>URL(scheme://host:port/path?query#fragment)</li>
+                        <li>
+                          <pre>
+&lt;router-link :to=&quot;{path: &#x27;/profile&#x27;,query: {name: &#x27;Ganace&#x27;, age: 18}}&quot;&gt;档案&lt;/router-link&gt;
+                      </pre>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+              <h6>vue-router router和route的由来</h6>
+              <h6>vue-router-全局导航守卫</h6>
+              <ul>
+                <li>APA改变页面标题title</li>
+                <li>
+                  <pre>
+const router =  new Router({
+  // 配置路由和组件的映射关系
+  routes: [
+    {
+      path: &#x27;&#x27;,
+      //redirect重定向
+      redirect: &#x27;/home&#x27;,
+      meta: {
+        title: &#x27;首页&#x27;
+      }
+    }
+  ]
+})
+
+router.beforeEach((to, from, next) =&gt; {
+  // 从from跳转到to
+  document.title = to.matched[0].meta.title
+  next()
+})
+// 3.export default将router对象传入到Vue实例
+export default router
+                  </pre>
+                </li>
+              </ul>
+              <h6>vue-router-导航守卫的补充</h6>
+              <ul>
+                <li>router.afterEach( (to,from) => {})</li>
+                <li>后置钩子不需要调用next()</li>
+                <li>
+                  路由独享守卫
+                  <pre v-pre>
+const router =  new Router({
+  // 配置路由和组件的映射关系
+  routes: [
+    {
+      path: &#x27;/profile&#x27;,
+      component: Profile,
+      meta: {
+        title: &#x27;档案&#x27;
+      },
+      beforeEnter: (to, from, next) =&gt; {
+        console.log(&#x27;beforeEnter Profile&#x27;);
+      }
+    }
+  ]
+})
+                  </pre>
+                </li>
+              </ul>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+                  123
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+&lt;script src=&quot;../common/js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;div id=&quot;app&quot;&gt;
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+    </template>
+  </div>
+  <script type="text/javascript">
+    const app = new Vue({
+      el: '#app',
+      data: {
+        tab: 'show',
+        title: '第99-115课 vue-router[安装配置使用，router-link，懒加载，路由嵌套，参数传递，router和route，导航守卫]',
+        messages: [
+          '',
+        ],
+      }
+    });
+  </script>
+</body>
+
+</html>

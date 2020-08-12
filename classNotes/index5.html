@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vue练习</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>
+            第5课
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6 text-secondary">{{ message }}</div>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+                  <ul>
+                    <li v-for="music in musics">
+                      {{ music }}
+                    </li>
+                  </ul>
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+&lt;div id=&quot;app&quot;&gt;
+  &lt;p&gt;第5课列表展示&lt;/p&gt;
+  &lt;ul&gt;
+    &lt;li v-for=&quot;music in musics&quot;&gt;
+      {{ music }}
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+&lt;script src=&quot;../common/js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+  //ES6新增let变量、const常量
+  const app = new Vue({
+    el: &#x27;#app&#x27;, //挂载
+    data: {
+      message: &#x27;v-for列表展示&#x27;,
+      musics: [&#x27;qianqian&#x27;, &#x27;kuwo&#x27;, &#x27;kugou&#x27;, &#x27;koukou&#x27;, &#x27;douban&#x27;, &#x27;wangyiyun&#x27;]
+    }
+  });
+&lt;/script&gt;
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+
+    </template>
+  </div>
+  <script type="text/javascript">
+    //ES6新增let变量、const常量
+    const app = new Vue({
+      el: '#app', //挂载
+      data: {
+        tab: 'show',
+        message: 'v-for列表展示',
+        musics: ['qianqian', 'kuwo', 'kugou', 'koukou', 'douban', 'wangyiyun']
+      }
+    });
+  </script>
+</body>
+
+</html>

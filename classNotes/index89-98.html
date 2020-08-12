@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vue练习</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>第89-98课 Vue ClI脚手架</q-toolbar-title>
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section class="text-secondary">
+              <div class="text-h6 text-secondary">{{ title }}</div>
+              <h6>vuecli脚手架的介绍和安装</h6>
+              <ul>
+                <li>VueCli使用前提: NodeJS,NPM/cnpm</li>
+                <li>用淘宝镜像安装：<code>npm config set registry https://registry.npm.taobao.org</code></li>
+                <li>vuecli2安装：<code>npm install -g @vue/cli-init</code>拉取2.x模板：<code>vue init webpack my-project</code></li>
+                <li>vue-cli的3.0+全局安装：<code>npm install -g @vue/cli</code></li>
+                <li>如果原来已经安装了vue-cli的话需要先卸载原来的安装 <code>npm uninstall vue-cli -g</code></li>
+                <li>报错解决：管理员权限打开cmd,<code>npm clean cache -force</code>,之后再次安装</li>
+              </ul>
+              <h6>vuecli使用</h6>
+              <ul>
+                <li>vuecli版本查看<code>vue -V</code></li>
+                <li>Vue CLI2初始化项目：
+                  <ul>
+                    <li><code><code>vue init webpack my-project</code></code></li>
+                    <li><code>Project name</code>给项目起名字</li>
+                    <li><code>Project description</code>项目描述</li>
+                    <li><code>Author</code>作者</li>
+                    <li><code>Runtime+Compiler/Runtime-only</code>一般选Runtime-only回车</li>
+                    <li><code>Install vue-router</code>是否安装vue-router,y回车</li>
+                    <li><code>Use ESlint to line your code</code>是否使用ESlint（js严格规范写法），n回车</li>
+                    <li><code>Set up unit tests</code>是否单元测试，n回车</li>
+                    <li><code>Setup e2e tests with Nightwatch</code>是否端到端测试依赖nightwatch,n回车</li>
+                    <li><code>...`npm install`...</code>是否安装npm，选择npm回车</li>
+                  </ul>
+                </li>
+                <li>
+                  vue-cli的3.0+初始化项目：
+                  <ul>
+                    <li><code>vue create my-project</code></li>
+                    <li><code>please pick a preset:</code>选择配置（Manually手动），Manually回车</li>
+                    <li><code>check the features needed for your project</code>在列表中空格选择取消，（Babel）回车</li>
+                    <li><code>where do you prefer placing config for Babel,PostCss,ESlint,etc.?</code>把配置文件独立放置（In dedicated config files）还是统一放置（In package.json）,(In dedicated config files)回车</li>
+                    <li><code>save this as a preset for future project</code>是否保存之前选择的配置，（y）回车</li>
+                    <li><code>save preset as:</code>保存名字，（ganace）回车</li>
+                    <li><code>pick the package manager to use when installing dependencies:</code>使用什么工具包,vue-cli4没有这个选项，（npm）回车</li>
+                  </ul>
+                </li>
+              </ul>
+              <h6>vuecli2安装CLI错误和ESlint规范</h6>
+              <h6>runtime-compiler和runtime-only的区别</h6>
+              <ul>
+                <li>
+                  简单总结：
+                  <ul>
+                    <li>如果在之后的开发中，你依然使用template，就需要选择runtime-compiler</li>
+                    <li>如果你之后的开发中，使用的是.vue文件开发，那么可以选择runtime-only</li>
+                  </ul>
+                </li>
+                <li>ast(abstract syntax tree)抽象语法树</li>
+                <li>runtime-compiler
+                  <ul>
+                    <li>template->ast->render->virtual dom->UI</li>
+                    <li>需要注册template: '&lt;App/&gt;',components: { App }</li>
+                  </ul>
+                </li>
+                <li>runtime-only
+                  <ul>
+                    <li>render->virtual dom->UI</li>
+                    <li>使用render: (h) => h(App)</li>
+                    <li>1.性能更高 2.代码量更少</li>
+                    <li>
+                      h本质是传过来的createElement
+                      <ul>
+                        <li>
+                          1.普通用法：createElement('标签',{标签的属性})
+                          <pre>
+createElement('h2',
+{class: 'box'},
+['hello world',createElement('button',['按钮'])])
+                          </pre>
+                        </li>
+                        <li>2.传入组件对象：createElement(App)</li>
+                        <li>
+                          .vue文件中的templete由谁处理了
+                          <ul>
+                            <li>由vue-template-compiler解析成组件对象,vue-template-compiler为开发时依赖</li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+              <h6>vuecli3+配置文件的查看和修改</h6>
+              <ul>
+                <li>1.启动配置服务器: <code>vue ui</code></li>
+              </ul>
+              <h6>箭头函数的使用和this指向</h6>
+              <ul>
+                <li>箭头函数：也是一种定义函数的方式</li>
+                <li>
+                  1.定义函数的方式：function
+                  <pre>
+const aaa = function () {
+
+}
+                  </pre>
+                </li>
+                <li>
+                  2.对象字面量中定义函数
+                  <pre>
+const obj = {
+  bbb(){
+
+  }
+}
+                  </pre>
+                </li>
+                <li>
+                  3.ES6中的箭头函数
+                  <pre>
+const ccc = () => {
+
+}
+                  </pre>
+                </li>
+                <li>
+                  箭头函数的参数和返回值
+                  <pre>
+const sum = (num1, num2) => {
+  return num1 + num2
+}
+//函数中只有一个参数
+const power = num => {
+  return num * num
+}
+//函数代码中只有一行代码
+const sum = (num1,num2) => num1 + num2
+const power = num => num * num  
+                  </pre>
+                </li>
+                <li>
+                  箭头函数this的使用
+                  <ul>
+                    <li>
+                      <pre>
+const obj = {
+  aaa(){
+    setTimeout(funciton () {
+      console.log(this);//window
+    })
+    setTimeout(() => {
+      console.log(this);//obj对象
+    })
+  }
+}
+                      </pre>
+                    </li>
+                    <li>箭头函数中的this是向外层作用域中，一层层查找this，直到有this的定义</li>
+                  </ul>
+                </li>
+              </ul>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+                  123
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+&lt;script src=&quot;../common/js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;div id=&quot;app&quot;&gt;
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+    </template>
+  </div>
+  <script type="text/javascript">
+    const app = new Vue({
+      el: '#app',
+      data: {
+        tab: 'show',
+        title: '第89-98课 Vue ClI脚手架 箭头函数使用和this',
+        messages: [
+          '',
+        ],
+      }
+    });
+  </script>
+</body>
+
+</html>

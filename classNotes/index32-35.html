@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vue练习</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>第32-35课</q-toolbar-title>
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section class="text-secondary">
+              <div class="text-h6 text-secondary">{{ title }}</div>
+              <h6>条件判断[v-if,v-else,v-else-if]</h6>
+              <h6>条件渲染案例：切换用户登录方式</h6>
+              <h6>input复用小问题(不希望复用，添加key)</h6>
+              <h6>v-show的使用以及和v-if的区别</h6>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+                  <h5 v-for="msg in messages">{{ msg }}</h2>
+                  <p v-if="isShow">{{music}}</p>
+                  <p v-else>isShow为false显示</p>
+                  <!-- v-else-if -->
+                  <p v-if="score>=90">优秀</p>
+                  <p v-else-if="score>=80">良好</p>
+                  <p v-else-if="score>=60">及格</p>
+                  <p v-else>不及格</p>
+                  <!-- 更好的写法 -->
+                  <p>{{result}}</p>
+
+                  条件渲染案例：切换用户登录方式
+                  input复用小问题：输入内容后再切换，发现输入框内容还在
+                  <form action="">
+                    <span v-if="isUser">
+                      <label for="username">用户账号</label>
+                      <input type="text" id="username">
+                    </span>
+                    <span v-else>
+                      <label for="email">用户邮箱</label>
+                      <input type="text" id="email">
+                    </span>
+                    <button @click.prevent="isUser = !isUser">切换登录</button>
+                  </form>
+                  切换之后清除input之前输入内容,保证key不同
+                  <form action="">
+                    <span v-if="isUser">
+                      <label for="username">用户账号</label>
+                      <input type="text" id="username" key="1">
+                    </span>
+                    <span v-else>
+                      <label for="email">用户邮箱</label>
+                      <input type="text" id="email" key="2">
+                    </span>
+                    <button @click.prevent="isUser = !isUser">切换登录,清除内容</button>
+                  </form>
+
+                  <!-- 当条件为false时，v-if根本不存在dom中，而v-show只改变了style中的display:none。 -->
+                  <!-- 显示/隐藏切换频繁，使用v-show -->
+                  <!-- 当只有一次切换，使用v-if -->
+                  <h6 v-show="isShow">Ganace!!!</h6>
+                  <h6 v-if="isShow">夏目!!!</h6>
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+&lt;div id=&quot;app&quot;&gt;
+  &lt;h2 v-for=&quot;msg in messages&quot;&gt;{{ msg }}&lt;/h2&gt;
+  &lt;p v-if=&quot;isShow&quot;&gt;{{music}}&lt;/p&gt;
+  &lt;p v-else&gt;isShow为false显示&lt;/p&gt;
+  &lt;!-- v-else-if --&gt;
+  &lt;p v-if=&quot;score&gt;=90&quot;&gt;优秀&lt;/p&gt;
+  &lt;p v-else-if=&quot;score&gt;=80&quot;&gt;良好&lt;/p&gt;
+  &lt;p v-else-if=&quot;score&gt;=60&quot;&gt;及格&lt;/p&gt;
+  &lt;p v-else&gt;不及格&lt;/p&gt;
+  &lt;!-- 更好的写法 --&gt;
+  &lt;p&gt;{{result}}&lt;/p&gt;
+
+  &lt;!-- 条件渲染案例：切换用户登录方式 --&gt;
+  &lt;!-- input复用小问题：输入内容后再切换，发现输入框内容还在 --&gt;
+  &lt;form action=&quot;&quot;&gt;
+    &lt;span v-if=&quot;isUser&quot;&gt;
+      &lt;label for=&quot;username&quot;&gt;用户账号&lt;/label&gt;
+      &lt;input type=&quot;text&quot; id=&quot;username&quot;&gt;
+    &lt;/span&gt;
+    &lt;span v-else&gt;
+      &lt;label for=&quot;email&quot;&gt;用户邮箱&lt;/label&gt;
+      &lt;input type=&quot;text&quot; id=&quot;email&quot;&gt;
+    &lt;/span&gt;
+    &lt;button @click.prevent=&quot;isUser = !isUser&quot;&gt;切换登录&lt;/button&gt;
+  &lt;/form&gt;
+  &lt;!-- 切换之后清除input之前输入内容,保证key不同 --&gt;
+  &lt;form action=&quot;&quot;&gt;
+    &lt;span v-if=&quot;isUser&quot;&gt;
+      &lt;label for=&quot;username&quot;&gt;用户账号&lt;/label&gt;
+      &lt;input type=&quot;text&quot; id=&quot;username&quot; key=&quot;1&quot;&gt;
+    &lt;/span&gt;
+    &lt;span v-else&gt;
+      &lt;label for=&quot;email&quot;&gt;用户邮箱&lt;/label&gt;
+      &lt;input type=&quot;text&quot; id=&quot;email&quot; key=&quot;2&quot;&gt;
+    &lt;/span&gt;
+    &lt;button @click.prevent=&quot;isUser = !isUser&quot;&gt;切换登录,清除内容&lt;/button&gt;
+  &lt;/form&gt;
+
+  &lt;!-- 当条件为false时，v-if根本不存在dom中，而v-show只改变了style中的display:none。 --&gt;
+  &lt;!-- 显示/隐藏切换频繁，使用v-show --&gt;
+  &lt;!-- 当只有一次切换，使用v-if --&gt;
+  &lt;h6 v-show=&quot;isShow&quot;&gt;Ganace!!!&lt;/h6&gt;
+  &lt;h6 v-if=&quot;isShow&quot;&gt;夏目!!!&lt;/h6&gt;
+&lt;/div&gt;
+
+&lt;script src=&quot;../common/js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+  const app = new Vue({
+    el: &#x27;#app&#x27;,
+    data: {
+      title: &#x27;第32-35课&#x27;,
+      messages: [
+        &#x27;条件判断[v-if,v-else,v-else-if]&#x27;,
+        &#x27;条件渲染案例：切换用户登录方式&#x27;,
+        &#x27;input复用小问题&#x27;,
+        &#x27;v-show的使用以及和v-if的区别&#x27;
+      ],
+      music: &#x27;qianqian&#x27;,
+      isShow: true,
+      score: 99,
+      isUser: true,
+      isShow: true
+    },
+    computed: {
+      result() {
+        let msg = &#x27;&#x27;;
+        if (this.score &gt;= 90) {
+          msg = &#x27;优秀&#x27;
+        } else if (this.score &gt;= 80) {
+          msg = &#x27;良好&#x27;
+        } else if (this.score &gt;= 60) {
+          msg = &#x27;及格&#x27;
+        } else {
+          msg = &#x27;不及格&#x27;
+        }
+        return msg;
+      }
+    },
+    methods: {}
+  });
+&lt;/script&gt;
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+
+    </template>
+  </div>
+
+  <script type="text/javascript">
+    const app = new Vue({
+      el: '#app',
+      data: {
+        tab: 'show',
+        title: '第32-35课',
+        messages: [
+          '条件判断[v-if,v-else,v-else-if]',
+          '条件渲染案例：切换用户登录方式',
+          'input复用小问题',
+          'v-show的使用以及和v-if的区别'
+        ],
+        music: 'qianqian',
+        isShow: true,
+        score: 99,
+        isUser: true,
+        isShow: true
+      },
+      computed: {
+        result() {
+          let msg = '';
+          if (this.score >= 90) {
+            msg = '优秀'
+          } else if (this.score >= 80) {
+            msg = '良好'
+          } else if (this.score >= 60) {
+            msg = '及格'
+          } else {
+            msg = '不及格'
+          }
+          return msg;
+        }
+      },
+      methods: {}
+    });
+  </script>
+</body>
+
+</html>

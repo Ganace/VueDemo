@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vue练习</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>{{ title }}</q-toolbar-title>
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section class="text-secondary">
+              <div class="text-h6 text-secondary">{{ title }}</div>
+              <h6>Vuex详解</h6>
+              <ul>
+                <li>
+                  Vuex是什么？（vue的状态管理工具）
+                  <ul>
+                    <li>Vuex是一个专门为Vue.js应用程序开发的状态管理模式</li>
+                    <li>它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化</li>
+                    <li>Vuex也集成到Vue的官方调试工具 devtools extension，提供了诸如零配置的time-travel调试、状态快照导入导出等高级调试功能</li>
+                  </ul>
+                </li>
+                <li>状态管理模式、集中式存储管理</li>
+                <li>
+                  管理什么状态呢？
+                  <ul>
+                    <li>例: 大型开发，多个状态，在多个界面间的共享问题</li>
+                    <li>例: 用户登录状态、用户名称、头像、地理位置信息等等</li>
+                    <li>例: 商品的收藏、购物车中的物品等等</li>
+                    <li>这些状态信息，我们都可以放在统一的地方，对它进行保存和管理，而且它们还是响应式的</li>
+                  </ul>
+                </li>
+              </ul>
+              <h6>Vuex安装 单页面到多界面状态管理切换</h6>
+              <ul>
+                <li><code>npm install vuex --save</code></li>
+                <li>前端: fortend 后端: backend</li>
+              </ul>
+              <h6>vuex-devtools和mutations</h6>
+              <h6>Vuex核心概念</h6>
+              <ul>
+                <li>State</li>
+                <li>Getters</li>
+                <li>Mutations</li>
+                <li>Actions</li>
+                <li>Modules</li>
+              </ul>
+              <h6>vuex-state 单一状态树的理解</h6>
+              <ul>
+                <li>单一状态树(Single Source of Truth),也可以翻译成单一数据源</li>
+              </ul>
+              <h6>vuex-getters的使用详解</h6>
+              <ul>
+                <li>当需要从store中获取一些state变异后的状态时，使用个getters</li>
+                <li>类似于单个组件中的计算属性somputed</li>
+              </ul>
+              <h6>vuex-mutations的携带参数</h6>
+              <ul>
+                <li>通常情况下，Vuex要求我们Mutation中的方法必须是同步方法</li>
+                <li>Vuex的store状态的更新唯一方式：提交Mutation更新</li>
+                <li>
+                  Mutation主要包括两部分
+                  <ul>
+                    <li>字符串的事件类型(type)</li>
+                    <li>一个回调函数(handler),该回调函数的第一个参数就是state</li>
+                  </ul>
+                </li>
+                <li>
+                  Mutation传递参数
+                  <pre>
+addCount(num) {
+this.$store.commit(&#x27;incrementCount&#x27;, num)
+}
+                  </pre>
+                  <pre>
+incrementCount(state, num){
+state.count += num
+}
+                  </pre>
+                </li>
+                <li>
+                  Mutation提交风格
+                  <ul>
+                    <li>通过commit提交</li>
+                    <li>Vue还提供了另外一种风格，它是一个包含type属性的对象</li>
+                    <li>
+                      methods:
+                      <pre>
+addCount(num) {
+// 1.普通的提交封装
+// this.$store.commit(&#x27;incrementCount&#x27;, num)
+// 2.特殊的提交封装
+this.$store.commit({
+type: &#x27;incrementCount1&#x27;,
+num
+})
+}
+                      </pre>
+                      mutations:
+                      <pre>
+incrementCount(state, num) {
+state.count += num
+},
+incrementCount1(state,payload) {
+state.count += payload.num
+}
+                      </pre>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  Mutation响应规则
+                  <ul>
+                    <li>Vuex的store中的state是响应式的，当state中的数据发生改变时，Vue组件会自动更新</li>
+                    <li>规则一：提前在store中初始化好所需的属性</li>
+                    <li>
+                      规则二：当给state中的对象添加新的属性时，使用下面的方式
+                      <ul>
+                        <li>方式一：使用Vue.set(obj,'newProp',123)</li>
+                        <li>方式二：用新对象给旧对象重新赋值</li>
+                      </ul>
+                    </li>
+                    <li>state中的所有属性都会被加入到响应式系统中，而响应式系统会监听属性的变化，当属性发生变化时，会通知所有界面中应用到该属性的地方，让界面发生刷新</li>
+                    <li>
+                      mutations:
+                      <pre>
+updateInfo(state){
+// state.info.name = 'nazimie'
+// 响应式添加
+Vue.set(state.info, 'address', 'beijing')
+// 响应式删除
+Vue.delete(state.info, 'age')
+}
+                      </pre>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  Mutation的类型常量
+                  <ul>
+                    <li>export const INCREMENT = 'increment'</li>
+                    <li>import { INCREMENT } from '@/store/mutation-type.js'</li>
+                    <li>this.$store.commit(INCREMENT)</li>
+                    <li>[INCREMENT](state) { state.count++ },</li>
+                  </ul>
+                </li>
+              </ul>
+              <h6>vuex-actions的使用详解</h6>
+              <ul>
+                <li>Action类似于Mutation，但是是用来代替Mutation进行异步操作的</li>
+                <li>
+                  vue实例 methods:
+                  <pre>
+aUpdateInfo() {
+  this.$store.dispatch('aUpdateInfo')
+}
+                  </pre>
+                </li>
+                <li>
+                  actions:
+                  <pre>
+// contexr上下文
+aUpdateInfo(context) {
+  setTimeout(() => {
+    context.commit('updateInfo')
+  },1000)
+}
+                  </pre>
+                </li>
+                <li>
+                  mutations:
+                  <pre>
+updateInfo(state){
+  // state.info.name = 'nazimie'
+  // 响应式添加
+  Vue.set(state.info, 'address', 'beijing')
+  // 响应式删除
+  Vue.delete(state.info, 'age')
+}
+                  </pre>
+                </li>
+              </ul>
+              <h6>vuex-modules的使用详解</h6>
+              <ul>
+                <li>Vue使用单一状态树，那也意味着很多状态都会交给Vuex来管理。</li>
+                <li>当应用变得非常复杂时，store对象就有可能变得相当臃肿</li>
+                <li>为了解决这个问题，vuex允许我们将store分割成模块(Module),而每个模块拥有自己的state、mutations、actions、getters等</li>
+              </ul>
+              <h6>ES6对象的解构-vuex-actions另一种写法</h6>
+              <ul>
+                <li>
+                  ES6对象的解构
+                  <pre>
+const obj = {
+  name: 'Ganace',
+  age: 18,
+  address: 'beijin'
+}
+const {name, age, height} = obj
+console.log(name)
+                  </pre>
+                </li>
+                <li>
+                  vuex-actions另一种写法
+                  <pre>
+const moduleA = {
+  state: {
+    count: 1,
+    name: &#x27;Natsume Takashi&#x27;
+  },
+  actions: {
+    aUpdateName2({state, commit ,rootState}) {
+      setTimeout(() =&gt; {
+        if(state.count + rootState.count %2 === 1){
+          commit(&#x27;updateName&#x27;,&#x27;saya&#x27;)
+        }
+      }, 1000)
+    }
+  },
+}
+                  </pre>
+                </li>
+              </ul>
+              <h6>store文件夹的目录组织</h6>
+              <ul>
+                <li>index.js</li>
+                <li>actions.js</li>
+                <li>mutations.js</li>
+                <li>getters.js</li>
+                <li>
+                  modules
+                  <ul>
+                    <li>cart.js</li>
+                    <li>products.js</li>
+                  </ul>
+                </li>
+              </ul>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+                  123
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+&lt;script src=&quot;../common/js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;div id=&quot;app&quot;&gt;
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+    </template>
+  </div>
+  <script type="text/javascript">
+  
+    const app = new Vue({
+      el: '#app',
+      data: {
+        tab: 'show',
+        title: '第129-140课 Vuex[安装使用store,State,Getters,Mutations,Actions,Modules]',
+        messages: [
+          '',
+        ],
+      }
+    });
+  </script>
+</body>
+
+</html>

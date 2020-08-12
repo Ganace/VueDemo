@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vue练习</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>第45-50课</q-toolbar-title>
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section class="text-secondary">
+              <div class="text-h6 text-secondary">{{ title }}</div>
+              <h6>v-model双向绑定</h6>
+              <h6>v-model结合radio类型使用</h6>
+              <h6>v-model结合checkbox使用</h6>
+              <h6>v-model结合select使用</h6>
+              <h6>input中的值绑定</h6>
+              <h6>v-model修饰符</h6>
+              <ul>
+                <li>.lazy懒加载:让数据在失去焦点或者回车时才会更新</li>
+                <li>.number 修饰符:让输入框中输入的内容自动转成数字类型</li>
+                <li>.trim修饰符：过滤内容左右两边的空格</li>
+              </ul>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+                  <h6>{{msg}}</h6>
+                  <h6>input双向绑定</h6>
+                  <h6>v-bind双向绑定</h6>
+                  <input type="text" :value="msg" @input="valueChange">
+                  <input type="text" :value="msg" @input="msg = $event.target.value">
+                  <h6>v-model双向绑定(上面两个操作:value、@input的语法糖)</h6>
+                  <input type="text" v-model="msg">
+                  <h6>v-model结合radio类型使用</h6>
+                  <label for="male">
+                    <input type="radio" name="sex" id="male" v-model="sex">男
+                  </label>
+                  <label for="female">
+                    <input type="radio" name="sex" id="female" v-model="sex">女
+                  </label>
+                  <p>选择结果{{sex}}</p>
+                  <h6>v-model结合checkbox使用</h6>
+                  <input type="checkbox" name="protocol" id="protocol" v-model="isAgree">同意协议
+                  <p>选择结果{{isAgree}}</p>
+                  <button :disabled="!isAgree">下一步</button>
+                  <p>多选框</p>
+                  <input type="checkbox" value="篮球" v-model="hobbles">篮球
+                  <input type="checkbox" value="篮球" v-model="hobbles">羽毛球
+                  <input type="checkbox" value="篮球" v-model="hobbles">乒乓球
+                  <input type="checkbox" value="篮球" v-model="hobbles">足球
+                  <p>选择结果{{hobbles}}</p>
+                  <h6>v-model结合select使用</h6>
+                  <select name="fruit" v-model="fruit">
+                    <option value="apple">苹果</option>
+                    <option value="orange">香蕉</option>
+                    <option value="banana">橘子</option>
+                  </select>
+                  <p>选择结果{{fruit}}</p>
+                  <p>多选</p>
+                  <select name="fruits" v-model="fruits" multiple>
+                    <option value="apple">苹果</option>
+                    <option value="orange">香蕉</option>
+                    <option value="banana">橘子</option>
+                  </select>
+                  <p>选择结果{{fruits}}</p>
+                  <h6>input中的值绑定</h6>
+                  <label v-for="item in originHobbies" :for="item">
+                    <input type="checkbox" :id="item" :value="item" v-model="originRes">{{item}}
+                  </label>
+                  <p>选择结果{{originRes}}</p>
+                  <h5>v-model修饰符</h5>
+                  <h6>.lazy懒加载:让数据在失去焦点或者回车时才会更新</h6>
+                  <input type="text" v-model.lazy="msg">
+                  <p>{{msg}}</p>
+                  <h6>.number 修饰符:让输入框中输入的内容自动转成数字类型</h6>
+                  <input type="number" v-model.number="age">
+                  <p>类型：{{typeof age}} 结果：{{age}}</p>
+                  <h6>.trim修饰符：过滤内容左右两边的空格</h6>
+                  <input type="text" v-model.trim="msg">
+                  <p>结果：{{msg}}</p>
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+&lt;div id=&quot;app&quot;&gt;
+  &lt;h6&gt;{{msg}}&lt;/h6&gt;
+  &lt;h6&gt;input双向绑定&lt;/h6&gt;
+  &lt;h6&gt;v-bind双向绑定&lt;/h6&gt;
+  &lt;input type=&quot;text&quot; :value=&quot;msg&quot; @input=&quot;valueChange&quot;&gt;
+  &lt;input type=&quot;text&quot; :value=&quot;msg&quot; @input=&quot;msg = $event.target.value&quot;&gt;
+  &lt;h6&gt;v-model双向绑定(上面两个操作:value、@input的语法糖)&lt;/h6&gt;
+  &lt;input type=&quot;text&quot; v-model=&quot;msg&quot;&gt;
+  &lt;h6&gt;v-model结合radio类型使用&lt;/h6&gt;
+  &lt;label for=&quot;male&quot;&gt;
+    &lt;input type=&quot;radio&quot; name=&quot;sex&quot; id=&quot;male&quot; v-model=&quot;sex&quot;&gt;男
+  &lt;/label&gt;
+  &lt;label for=&quot;female&quot;&gt;
+    &lt;input type=&quot;radio&quot; name=&quot;sex&quot; id=&quot;female&quot; v-model=&quot;sex&quot;&gt;女
+  &lt;/label&gt;
+  &lt;p&gt;选择结果{{sex}}&lt;/p&gt;
+  &lt;h6&gt;v-model结合checkbox使用&lt;/h6&gt;
+  &lt;input type=&quot;checkbox&quot; name=&quot;protocol&quot; id=&quot;protocol&quot; v-model=&quot;isAgree&quot;&gt;同意协议
+  &lt;p&gt;选择结果{{isAgree}}&lt;/p&gt;
+  &lt;button :disabled=&quot;!isAgree&quot;&gt;下一步&lt;/button&gt;
+  &lt;p&gt;多选框&lt;/p&gt;
+  &lt;input type=&quot;checkbox&quot; value=&quot;篮球&quot; v-model=&quot;hobbles&quot;&gt;篮球
+  &lt;input type=&quot;checkbox&quot; value=&quot;篮球&quot; v-model=&quot;hobbles&quot;&gt;羽毛球
+  &lt;input type=&quot;checkbox&quot; value=&quot;篮球&quot; v-model=&quot;hobbles&quot;&gt;乒乓球
+  &lt;input type=&quot;checkbox&quot; value=&quot;篮球&quot; v-model=&quot;hobbles&quot;&gt;足球
+  &lt;p&gt;选择结果{{hobbles}}&lt;/p&gt;
+  &lt;h6&gt;v-model结合select使用&lt;/h6&gt;
+  &lt;select name=&quot;fruit&quot; v-model=&quot;fruit&quot;&gt;
+    &lt;option value=&quot;apple&quot;&gt;苹果&lt;/option&gt;
+    &lt;option value=&quot;orange&quot;&gt;香蕉&lt;/option&gt;
+    &lt;option value=&quot;banana&quot;&gt;橘子&lt;/option&gt;
+  &lt;/select&gt;
+  &lt;p&gt;选择结果{{fruit}}&lt;/p&gt;
+  &lt;p&gt;多选&lt;/p&gt;
+  &lt;select name=&quot;fruits&quot; v-model=&quot;fruits&quot; multiple&gt;
+    &lt;option value=&quot;apple&quot;&gt;苹果&lt;/option&gt;
+    &lt;option value=&quot;orange&quot;&gt;香蕉&lt;/option&gt;
+    &lt;option value=&quot;banana&quot;&gt;橘子&lt;/option&gt;
+  &lt;/select&gt;
+  &lt;p&gt;选择结果{{fruits}}&lt;/p&gt;
+  &lt;h6&gt;input中的值绑定&lt;/h6&gt;
+  &lt;label  v-for=&quot;item in originHobbies&quot; :for=&quot;item&quot;&gt;
+    &lt;input type=&quot;checkbox&quot; :id=&quot;item&quot; :value=&quot;item&quot; v-model=&quot;originRes&quot;&gt;{{item}}
+  &lt;/label&gt;
+  &lt;p&gt;选择结果{{originRes}}&lt;/p&gt;
+  &lt;h5&gt;v-model修饰符&lt;/h5&gt;
+  &lt;h6&gt;.lazy懒加载:让数据在失去焦点或者回车时才会更新&lt;/h6&gt;
+  &lt;input type=&quot;text&quot; v-model.lazy=&quot;msg&quot;&gt;
+  &lt;p&gt;{{msg}}&lt;/p&gt;
+  &lt;h6&gt;.number 修饰符:让输入框中输入的内容自动转成数字类型&lt;/h6&gt;
+  &lt;input type=&quot;number&quot; v-model.number=&quot;age&quot;&gt;
+  &lt;p&gt;类型：{{typeof age}} 结果：{{age}}&lt;/p&gt;
+  &lt;h6&gt;.trim修饰符：过滤内容左右两边的空格&lt;/h6&gt;
+  &lt;input type=&quot;text&quot; v-model.trim=&quot;msg&quot;&gt;
+  &lt;p&gt;结果：{{msg}}&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;script src=&quot;../common/js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+  //ES6新增let变量、const常量
+  const app = new Vue({
+    el: &#x27;#app&#x27;, //挂载
+    data: {
+      tab: &#x27;show&#x27;,
+      title: &#x27;第45-50课 v-model的使用&#x27;,
+      messages: [
+        &#x27;v-model的使用和基本原理&#x27;,
+        &#x27;v-model结合radio,checkbox,select类型使用&#x27;,
+        &#x27;v-model中的值绑定&#x27;,
+        &#x27;v-model修饰符.lazy,.number,.trim&#x27;
+      ],
+      msg: &#x27;夏目友人帐&#x27;,
+      sex: &#x27;&#x27;,
+      isAgree: false,//单选框
+      hobbles:[],//多选框
+      fruit: &#x27;&#x27;,
+      fruits: [],
+      originHobbies: [&#x27;篮球&#x27;,&#x27;乒乓球&#x27;,&#x27;羽毛球&#x27;,&#x27;台球&#x27;,&#x27;高尔夫球&#x27;],
+      originRes: [],
+      age: &#x27;&#x27;,
+    },
+    methods: {
+      valueChange(){
+        this.msg = event.target.value
+      }
+    },
+  });
+&lt;/script&gt;
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+
+    </template>
+
+  </div>
+  <script type="text/javascript">
+    //ES6新增let变量、const常量
+    const app = new Vue({
+      el: '#app', //挂载
+      data: {
+        tab: 'show',
+        title: '第45-50课 v-model的使用',
+        messages: [
+          'v-model的使用和基本原理',
+          'v-model结合radio,checkbox,select类型使用',
+          'v-model中的值绑定',
+          'v-model修饰符.lazy,.number,.trim'
+        ],
+        msg: '夏目友人帐',
+        sex: '',
+        isAgree: false, //单选框
+        hobbles: [], //多选框
+        fruit: '',
+        fruits: [],
+        originHobbies: ['篮球', '乒乓球', '羽毛球', '台球', '高尔夫球'],
+        originRes: [],
+        age: '',
+      },
+      methods: {
+        valueChange() {
+          this.msg = event.target.value
+        }
+      },
+    });
+  </script>
+</body>
+
+</html>

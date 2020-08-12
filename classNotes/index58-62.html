@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vue练习</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>第58-62课</q-toolbar-title>
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section class="text-secondary">
+              <div class="text-h6 text-secondary">{{ title }}</div>
+              <h6>父传子props</h6>
+              <h6>props中的驼峰标识</h6>
+              <ul>
+                <li>props中的数据驼峰标识，例如cInfo在组件使用时，标签中为:c-info=""</li>
+              </ul>
+              <h6>子传父（自定义事件）</h6>
+              <ul>
+                <li>第一步：在子组件中，通过$emit()来触发事件</li>
+                <li>第二步：在父组件中，通过v-on来监听子组件事件</li>
+              </ul>
+              <h6>项目演示HYMall(github,coderwhy)</h6>
+              <ul>
+                <li>第一步：github上下载下来</li>
+                <li>第二步：项目根目录运行npm install，安装依赖</li>
+                <li>第三步：项目根目录运行npm run serve，运行项目</li>
+              </ul>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+
+                  <!-- 父传子 -->
+                  <cpn :ctitle="title" :cmessages="messages"></cpn>
+                  <cpn></cpn>
+                  <!-- props驼峰标志 -->
+                  <cpn :c-info="info"></cpn>
+                  <!-- 子传父 -->
+                  <cpn @item-click="cpnClick"></cpn>
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+&lt;div id=&quot;app&quot;&gt;
+  &lt;!-- 父传子 --&gt;
+    &lt;cpn :ctitle=&quot;title&quot; :cmessages=&quot;messages&quot;&gt;&lt;/cpn&gt;
+    &lt;cpn&gt;&lt;/cpn&gt;
+    &lt;!-- props驼峰标志 --&gt;
+    &lt;cpn :c-info=&quot;info&quot;&gt;&lt;/cpn&gt;
+    &lt;!-- 子传父 --&gt;
+    &lt;cpn @item-click=&quot;cpnClick&quot;&gt;&lt;/cpn&gt;
+  &lt;/div&gt;
+  &lt;template id=&quot;cpn&quot;&gt;
+    &lt;div&gt;
+      &lt;p&gt;{{ctitle}}&lt;/p&gt;
+      &lt;ul&gt;
+        &lt;li v-for=&quot;item in cmessages&quot;&gt;{{item}}&lt;/li&gt;
+      &lt;/ul&gt;
+      &lt;p&gt;{{cInfo}}&lt;/p&gt;
+      &lt;!-- 子传父例子 --&gt;
+      &lt;button v-for=&quot;item in categories&quot; @click=&quot;btnClick(item)&quot;&gt;{{item.name}}&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/template&gt;
+
+  &lt;script src=&quot;../common/js/vue.js&quot;&gt;&lt;/script&gt;
+  &lt;script type=&quot;text/javascript&quot;&gt;
+    const cpn = {
+      template: &#x27;#cpn&#x27;,
+      // 提供数组
+      // props: [&#x27;ctitle&#x27;,&#x27;cmessages&#x27;],
+      // 提供对象
+      props: {
+        // ctitle: [String,Number],//多个可选类型
+        // cmessages: Array,// 1.类型限制
+        ctitle: {
+          type: String,
+          default: &#x27;aaaaaaaa&#x27;,//2.提供默认值
+          // required: true,//必须传值
+        },
+        // 类型是对象Object或者数组Array时，默认值必须是一个函数，并且有返回值
+        cmessages: {
+          type: Array,
+          default(){
+            return [&#x27;111&#x27;,&#x27;222&#x27;,&#x27;333&#x27;]
+          }
+        },
+        // 驼峰标识
+        cInfo: {
+          type: Object,
+          default(){
+            return {}
+          }
+        }
+      },
+      // 子传父
+      data() {
+        return {
+          categories: [
+            {id: 1234, name: &#x27;热门推荐&#x27;},
+            {id: 2344, name: &#x27;手机数码&#x27;},
+            {id: 3842, name: &#x27;家用电器&#x27;},
+            {id: 3642, name: &#x27;电脑办公&#x27;}
+          ]
+        }
+      },
+      methods: {
+        btnClick(item){
+          console.log(&#x27;子组件发射&#x27;,item)
+          //子组件发射事件(注意驼峰写法)
+          this.$emit(&#x27;item-click&#x27;, item)
+        }
+      },
+    }
+    const app = new Vue({
+      el: &#x27;#app&#x27;,
+      data: {
+        tab: &#x27;show&#x27;,
+        title: &#x27;第58-62课 父子组件通信&#x27;,
+        messages: [
+          &#x27;父传子props&#x27;,
+          &#x27;props驼峰标志&#x27;,
+          &#x27;子传父（自定义事件）&#x27;
+        ],
+        info:{
+          name: &#x27;Ganace&#x27;,
+          age: 18
+        }
+      },
+      methods: {
+        cpnClick(item){
+          console.log(&#x27;父组件接收&#x27;,item)
+        }
+      },
+      components: {
+        cpn
+      }
+    });
+  &lt;/script&gt;
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+    </template>
+  </div>
+  <template id="cpn">
+    <div>
+      <p>{{ctitle}}</p>
+      <ul>
+        <li v-for="item in cmessages">{{item}}</li>
+      </ul>
+      <p>{{cInfo}}</p>
+      <!-- 子传父例子 -->
+      <button v-for="item in categories" @click="btnClick(item)">{{item.name}}</button>
+    </div>
+  </template>
+  <script type="text/javascript">
+    const cpn = {
+      template: '#cpn',
+      // 提供数组
+      // props: ['ctitle','cmessages'],
+      // 提供对象
+      props: {
+        // ctitle: [String,Number],//多个可选类型
+        // cmessages: Array,// 1.类型限制
+        ctitle: {
+          type: String,
+          default: 'aaaaaaaa', //2.提供默认值
+          // required: true,//必须传值
+        },
+        // 类型是对象Object或者数组Array时，默认值必须是一个函数，并且有返回值
+        cmessages: {
+          type: Array,
+          default () {
+            return ['111', '222', '333']
+          }
+        },
+        // 驼峰标识
+        cInfo: {
+          type: Object,
+          default () {
+            return {}
+          }
+        }
+      },
+      // 子传父
+      data() {
+        return {
+          categories: [{
+              id: 1234,
+              name: '热门推荐'
+            },
+            {
+              id: 2344,
+              name: '手机数码'
+            },
+            {
+              id: 3842,
+              name: '家用电器'
+            },
+            {
+              id: 3642,
+              name: '电脑办公'
+            }
+          ]
+        }
+      },
+      methods: {
+        btnClick(item) {
+          console.log('子组件发射', item)
+          //子组件发射事件(注意驼峰写法)
+          this.$emit('item-click', item)
+        }
+      },
+    }
+    const app = new Vue({
+      el: '#app',
+      data: {
+        tab: 'show',
+        title: '第58-62课 父子组件通信',
+        messages: [
+          '父传子props',
+          'props驼峰标志',
+          '子传父（自定义事件）'
+        ],
+        info: {
+          name: 'Ganace',
+          age: 18
+        }
+      },
+      methods: {
+        cpnClick(item) {
+          console.log('父组件接收', item)
+        }
+      },
+      components: {
+        cpn
+      }
+    });
+  </script>
+</body>
+
+</html>

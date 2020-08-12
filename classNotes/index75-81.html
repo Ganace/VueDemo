@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vue练习</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>第75-81课</q-toolbar-title>
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section class="text-secondary">
+              <div class="text-h6 text-secondary">{{ title }}</div>
+              <h6>webpack介绍</h6>
+              <ul>
+                <li>从本质上讲，webpack是一个现代的JavaScript应用的静态模块打包工具。</li>
+                <li>包含两个核心功能：模块化，打包</li>
+              </ul>
+              <h6>webpack安装</h6>
+              <p>安装webpack首先需要安装node.js，node.js自带了软件包管理工具npm</p>
+              <ul>
+                <li>
+                  1.查看自己的node版本
+                  <ul>
+                    <li><code>node -v</code></li>
+                    <li>检查是否已经安装并且查看版本(node -v)：打开cmd,输入<code>node -v</code>,回车</li>
+                  </ul>
+                </li>
+                <li>
+                  2.全局安装webpack(vue cli2依赖3.6.0版本)
+                  <ul>
+                    <li><code>npm install webpack -g</code></li>
+                    <li>指定版本：<code>npm install webpack@3.6.0 -g</code></li>
+                    <li>查看版本：<code>webpack --version</code>或者<code>webpack -v</code></li>
+                  </ul>
+                </li>
+                <li>
+                  3.局部安装webpack
+                  <ul>
+                    <li>--save-dev是开发时依赖，项目打包之后不需要继续使用的</li>
+                    <li>cd到对应目录</li>
+                    <li><code>npm install webpack --save-dev</code></li>
+                    <li>指定版本：<code>npm install webpack@3.6.0 --save-dev</code></li>
+                    <li>安装webpack-cli<code>npm install webpack-cli -g</code></li>
+                    <li>webpack4.x版本以上需要另外安装webpack-cli <code>npm install --save-dev webpack-cli</code></li>
+                  </ul>
+                </li>
+              </ul>
+              <h6>webpack基本使用</h6>
+              <ul>
+                <li>1.cd到项目目录</li>
+                <li>2,用webpack工具把./src/main.js文件打包到./dist/bundle.js文件,如下：</li>
+                <li>旧版：<code>webpack ./src/main.js ./dist/bundle.js</code></li>
+                <li>新版：<code>webpack ./src/main.js -o ./dist/bundle.js</code></li>
+                <li>配置模式：<code>webpack ./src/main.js -o ./dist/bundle.js
+                    --mode=development</code>(--mode=development为配置开发者模式)</li>
+              </ul>
+              <h6>webpack.config.js配置和webpack.json配置</h6>
+              <ul>
+                <li>
+                  1.配置webpack.config.js
+                  <pre>
+const path = require('path')
+
+module.exports = {
+  entry: './src/main.js',
+  output: {
+    path: './dist',
+    filename: 'bundle.js'
+  },
+  mode: 'development'
+};
+                </pre>
+                </li>
+                <li>
+                  2.package.json通过npm init生成
+                  <ul>
+                    <li><code>npm init</code></li>
+                    <li><code>package name: (learnvuejs02-v1)</code> (起一个包的名字,括号内为默认名)</li>
+                    <li><code>version: (1.0.0)</code>(版本号)</li>
+                    <li><code>description:</code>(描述)</li>
+                    <li><code>entry point: (webpack.config.js) index.js</code>(入口)</li>
+                    <li>...全默认回车</li>
+                    <li>如果全默认可以直接输入<code>npm init -y</code></li>
+                  </ul>
+                </li>
+                <li>
+                  3.package.json中定义自启动
+                  <li>package.json文件的"scripts"中添加<code>"build": "webpack"</code></li>
+                  <li>局部安装webpack <code>npm install webpack@3.6.0 --save-dev</code>(只有开发时依赖--save-dev，会自动在package.json中添加"devDependencies": {"webpack":"^3.6.0"},</li>
+                  <li>运行webpack <code>npm run build</code>(scripts配置优先运行本地webpack版本)</li>
+                </li>
+              </ul>
+              <h6>webpack中使用css的配置</h6>
+              <ul>
+                <li>
+                  步骤一：通过npm安装loader
+                  <ul>
+                    <li>打开<a href="https://www.webpackjs.com/loaders/">https://www.webpackjs.com/loaders/</a>  点击选择"样式"</li>
+                    <li>css-loader安装<code>npm install --save-dev css-loader</code></li>
+                    <li>style-loader安装<code>npm install --save-dev style-loader</code></li>
+                    <li>file.js文件<pre>import css from 'file.css';</pre></li>
+                  </ul>
+                </li>
+                <li>
+                  步骤二：在webpack.config.js中的modules关键字下进行配置
+                  <ul>
+                    <li>webpack.config.js文件
+                      <pre>
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        //css-loader只负责将css文件进行加载
+        // style-loader负责将样式添加到DOM中
+        use: [ 'style-loader', 'css-loader' ]
+      }
+    ]
+  }
+}
+                      </pre>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+              <h6>webpack-less文件的处理</h6>
+              <ul>
+                <li><code>npm install --save-dev less-loader less</code></li>
+                <li>
+                  <pre>
+  module: {
+    rules: [
+      {
+        test: /\.less$/,
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+          },
+          {
+            loader: 'less-loader',
+            options: {
+              lessOptions: {
+                strictMath: true,
+              },
+            },
+          },
+        ],
+      },
+    ],
+  },
+};
+                  </pre>
+                </li>
+              </ul>
+              <h6>webpack-图片文件的处理</h6>
+              <ul>
+                <li><code>npm install --save-dev url-loader</code></li>
+                <li>
+                  <pre>
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192,
+              name: 'img/[name]_[hash:8].[ext]'
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
+                  </pre>
+                </li>
+                <li><code>npm install --save-dev file-loader</code></li>
+                <li>
+                <pre>
+module.exports = {
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js',
+    publicPath: 'dist/'
+  },
+}
+                </pre>
+                </li>
+              </ul>
+              <h6>webpack-ES6转ES5的babel</h6>
+              <ul>
+                <li>未安装webpack:<code>npm install -D babel-loader @babel/core @babel/preset-env webpack</code></li>
+                <li>已经安装webpack: <code>npm install -D babel-loader @babel/core @babel/preset-env</code></li>
+                <pre>
+module: {
+  rules: [
+    {
+      test: /\.m?js$/,
+      exclude: /(node_modules|bower_components)/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: ['@babel/preset-env']
+        }
+      }
+    }
+  ]
+}
+                </pre>
+              </ul>
+            </q-card-section>
+            <q-tabs v-show="false" v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-show="false" v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+                  123
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+    </template>
+  </div>
+  <script type="text/javascript">
+    const app = new Vue({
+      el: '#app',
+      data: {
+        tab: 'show',
+        title: '第75-8课 webpack[介绍，安装，配置(css,style,less,img,ES6转ES5)]',
+        messages: [
+          '',
+        ],
+      }
+    });
+  </script>
+</body>
+
+</html>

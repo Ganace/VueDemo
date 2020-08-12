@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vue练习</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div class="q-pa-md row items-start q-gutter-md">
+      <slot :menus="menus">
+        <q-btn-group push>
+          <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+          <q-btn color="secondary" label="Menu">
+            <q-menu auto-close>
+              <q-list style="min-width: 100px">
+                <q-item clickable v-for="(m,index) in menus" :key="index">
+                  <q-item-section>
+                    <a :href="'./classNotes/'+m.url">
+                      <div>
+                        <span class="text-secondary">{{ m.title }}</span>
+                        <span>{{ m.message }}</span>
+                      </div>
+                    </a>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
+        </q-btn-group>
+      </slot>
+    </div>
+  </template>
+  <script type="text/javascript" src="./classNotes/menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-primary text-white shadow-2">
+          <q-toolbar-title>{{ title }}</q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-pa-md row items-start q-gutter-md">
+          <btn-menu>
+            <template slot-scope="slot">
+              <q-card v-for="contact in slot.menus" :key="contact.id" class="my-card bg-secondary text-white"
+                style="width:100%;max-width: 230px">
+                <q-card-section>
+                  <div class="text-h6">{{ contact.title }}</div>
+                  <!-- <div class="text-subtitle2">by John Doe</div> -->
+                </q-card-section>
+  
+                <q-card-section>
+                  {{ contact.message }}
+                </q-card-section>
+  
+                <q-separator dark></q-separator>
+  
+                <q-card-actions align="right">
+                  <a :href="'./classNotes/'+contact.url">
+                    <q-btn flat class="text-white bg-info">MORE</q-btn>
+                  </a>
+                </q-card-actions>
+              </q-card>
+            </template>
+          </btn-menu>
+        </div>
+      </div>
+    </template>
+  </div>
+  <script type="text/javascript">
+    const app = new Vue({
+      el: '#app',
+      data: {
+        title: 'Vue练习',
+        expanded: false,
+      }
+    });
+  </script>
+</body>
+
+</html>

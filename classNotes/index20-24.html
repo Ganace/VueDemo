@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vue练习</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="">
+  <style>
+    .red {
+      color: red;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>第20-24课</q-toolbar-title>
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6 text-secondary">{{ title }}</div>
+              <p>
+                <div class="text-h6">computed计算属性</div><br />
+              </p>
+              <p>
+                <div class="text-h6">vue计算属性的setter和getter</div><br />
+                课外扩展使用filter,map,reduce
+              </p>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+                  <h2 v-for="msg in messages">{{ msg }}</h2>
+
+                  <p>{{firstName + ' ' + lastName}}</p>
+                  <p>{{ firstName }} {{ lastName }}</p>
+                  <p>{{ getFullName() }}</p>
+                  <p>{{ fullName }}</p>
+                  <p>总用户数：{{ totalUsers }} | {{ totalUsers1 }} | {{ totalUsers2 }}</p>
+
+                  <!-- setter&getter -->
+                  <p>{{ fullName1 }}</p>
+
+                  <!-- // 计算属性的缓存，和methods的对比 -->
+                  <p>{{ getFullName() }}</p>
+                  <p>{{ getFullName() }}</p>
+                  <p>{{ getFullName() }}</p>
+                  <p>{{ getFullName() }}</p>
+                  <p>{{ fullName }}</p>
+                  <p>{{ fullName }}</p>
+                  <p>{{ fullName }}</p>
+                  <p>{{ fullName }}</p>
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+&lt;div id=&quot;app&quot;&gt;
+  &lt;h2 v-for=&quot;msg in messages&quot;&gt;{{ msg }}&lt;/h2&gt;
+
+  &lt;p&gt;{{firstName + &#x27; &#x27; + lastName}}&lt;/p&gt;
+  &lt;p&gt;{{ firstName }} {{ lastName }}&lt;/p&gt;
+  &lt;p&gt;{{ getFullName() }}&lt;/p&gt;
+  &lt;p&gt;{{ fullName }}&lt;/p&gt;
+  &lt;p&gt;总用户数：{{ totalUsers }} | {{ totalUsers1 }} | {{ totalUsers2 }}&lt;/p&gt;
+
+  &lt;!-- setter&amp;getter --&gt;
+  &lt;p&gt;{{ fullName1 }}&lt;/p&gt;
+
+  &lt;!-- // 计算属性的缓存，和methods的对比 --&gt;
+  &lt;p&gt;{{ getFullName() }}&lt;/p&gt;
+  &lt;p&gt;{{ getFullName() }}&lt;/p&gt;
+  &lt;p&gt;{{ getFullName() }}&lt;/p&gt;
+  &lt;p&gt;{{ getFullName() }}&lt;/p&gt;
+  &lt;p&gt;{{ fullName }}&lt;/p&gt;
+  &lt;p&gt;{{ fullName }}&lt;/p&gt;
+  &lt;p&gt;{{ fullName }}&lt;/p&gt;
+  &lt;p&gt;{{ fullName }}&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;script src=&quot;../common/js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+  const app = new Vue({
+    el: &#x27;#app&#x27;,
+    data: {
+    tab: &#x27;show&#x27;,
+      title: &#x27;第20-24课 vue计算属性的setter和getter&#x27;,
+      messages: [
+        &#x27;vue计算属性&#x27;,
+        &#x27;vue计算属性的setter和getter&#x27;,
+        &#x27;vue计算属性的缓存&#x27;
+      ],
+      firstName: &#x27;夏目&#x27;,
+      lastName: &#x27;贵志&#x27;,
+
+      musics: [{
+          name: &#x27;qianqian&#x27;,
+          users: 12369
+        },
+        {
+          name: &#x27;kuwo&#x27;,
+          users: 133536
+        },
+        {
+          name: &#x27;kugou&#x27;,
+          users: 3456
+        },
+        {
+          name: &#x27;wangyiyun&#x27;,
+          users: 2535
+        },
+      ]
+    },
+    // computed计算属性
+    computed: {
+      // 计算属性单独调取get方法的简写
+      fullName: function () {
+        console.log(&#x27;fullName&#x27;);
+        return this.firstName + &#x27; &#x27; + this.lastName;
+      },
+      //课外扩展使用filter,map,reduce
+      totalUsers: function () {
+        let result = 0;
+        for (let i = 0; i &lt; this.musics.length; i++) {
+          result += this.musics[i].users;
+        }
+        return result;
+      },
+      // ES6
+      totalUsers1: function () {
+        let result = 0;
+        // for(let i in this.musics){
+        //   result += this.musics[i].users;
+        // }
+        for (let i of this.musics) {
+          result += i.users;
+        }
+        return result;
+      },
+      // reduce
+      totalUsers2: function () {
+        return this.musics.reduce(function (all, m) {
+          return all + m.users
+        }, 0);
+      },
+      // setter&amp;getter
+      // 计算属性一般没有set方法，只读属性
+      // 单独调取get方法，例如上fullName方法
+      fullName1: {
+        set: function (newValue) {
+          console.log(&#x27;set&#x27;, newValue);
+          const names = newValue.split(&#x27; &#x27;);
+          this.firstName = names[0];
+          this.lastName = names[1];
+        },
+        get: function () {
+          return this.firstName + &#x27; &#x27; + this.lastName;
+        }
+      }
+      // 计算属性的缓存：计算属性只调用一次之后缓存起来，当this.firstName和this.lastName中有改变时，才再次调用然后缓存
+    },
+    methods: {
+      getFullName: function () {
+        console.log(&#x27;getFullName&#x27;);
+        return this.firstName + &#x27; &#x27; + this.lastName;
+      }
+    },
+  });
+&lt;/script&gt;
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+
+    </template>
+</div>
+
+<script type="text/javascript">
+  const app = new Vue({
+    el: '#app',
+    data: {
+    tab: 'show',
+      title: '第20-24课 vue计算属性的setter和getter',
+      messages: [
+        'vue计算属性',
+        'vue计算属性的setter和getter',
+        'vue计算属性的缓存'
+      ],
+      firstName: '夏目',
+      lastName: '贵志',
+
+      musics: [{
+          name: 'qianqian',
+          users: 12369
+        },
+        {
+          name: 'kuwo',
+          users: 133536
+        },
+        {
+          name: 'kugou',
+          users: 3456
+        },
+        {
+          name: 'wangyiyun',
+          users: 2535
+        },
+      ]
+    },
+    // computed计算属性
+    computed: {
+      // 计算属性单独调取get方法的简写
+      fullName: function () {
+        console.log('fullName');
+        return this.firstName + ' ' + this.lastName;
+      },
+      //课外扩展使用filter,map,reduce
+      totalUsers: function () {
+        let result = 0;
+        for (let i = 0; i < this.musics.length; i++) {
+          result += this.musics[i].users;
+        }
+        return result;
+      },
+      // ES6
+      totalUsers1: function () {
+        let result = 0;
+        // for(let i in this.musics){
+        //   result += this.musics[i].users;
+        // }
+        for (let i of this.musics) {
+          result += i.users;
+        }
+        return result;
+      },
+      // reduce
+      totalUsers2: function () {
+        return this.musics.reduce(function (all, m) {
+          return all + m.users
+        }, 0);
+      },
+      // setter&getter
+      // 计算属性一般没有set方法，只读属性
+      // 单独调取get方法，例如上fullName方法
+      fullName1: {
+        set: function (newValue) {
+          console.log('set', newValue);
+          const names = newValue.split(' ');
+          this.firstName = names[0];
+          this.lastName = names[1];
+        },
+        get: function () {
+          return this.firstName + ' ' + this.lastName;
+        }
+      }
+      // 计算属性的缓存：计算属性只调用一次之后缓存起来，当this.firstName和this.lastName中有改变时，才再次调用然后缓存
+    },
+    methods: {
+      getFullName: function () {
+        console.log('getFullName');
+        return this.firstName + ' ' + this.lastName;
+      }
+    },
+  });
+  </script>
+</body>
+
+</html>

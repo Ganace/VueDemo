@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue</title>
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>{{ title }}</q-toolbar-title>
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6 text-secondary">{{ title }} {{ message }}</div>
+              <p>
+                <div class="text-h6">定义vue的template</div><br />
+                全局组件: 可以在vue控制的任意模版下使用<br />
+                局部组件: 仅在实例控制的html代码段里可以使用
+              </p>
+              <p>
+                <div class="text-h6">Mustache语法（双大括号,翻译：胡须）</div><br />
+              </p>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+                  <p>{{ message }}</p>
+                  <p>{{ ( 1 + 2 ) * 3 }}</p>
+                  <p>{{ num + 1 }}</p>
+                  <p>{{ num * 2 }}</p>
+                  <p>{{ title + message }}</p>
+                  <p>{{ title + ' ' + message }}</p>
+                  <p>{{ title }} {{ message }}</p>
+                  <my-component></my-component>
+                  <my-ganace></my-ganace>
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+&lt;div id=&quot;app&quot;&gt;
+  &lt;p&gt;{{ message }}&lt;/p&gt;
+  &lt;p&gt;{{ ( 1 + 2 ) * 3 }}&lt;/p&gt;
+  &lt;p&gt;{{ num + 1 }}&lt;/p&gt;
+  &lt;p&gt;{{ num * 2 }}&lt;/p&gt;
+  &lt;p&gt;{{ title + message }}&lt;/p&gt;
+  &lt;p&gt;{{ title + &#x27; &#x27; + message }}&lt;/p&gt;
+  &lt;p&gt;{{ title }} {{ message }}&lt;/p&gt;
+  &lt;my-component&gt;&lt;/my-component&gt;
+  &lt;my-ganace&gt;&lt;/my-ganace&gt;
+&lt;/div&gt;
+&lt;div id=&quot;app2&quot;&gt;&lt;/div&gt;
+
+&lt;script src=&quot;../common/js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+  Vue.component(&#x27;my-component&#x27;, {
+    template: &quot;&lt;div&gt;我是全局组件-{{ name }}&lt;/div&gt;&quot;,
+    // 使用vue.component定义组件
+    // 第一参数: 定义组件的名字
+    // 第二参数: 是个对象
+    // 全局组件: 可以在vue控制的任意模版下使用
+    data: function () {
+      // data字段必须是函数
+      return {
+        name: &#x27;abc&#x27;
+      }
+    }
+  })
+  const app = new Vue({
+    el: &#x27;#app&#x27;,
+    data: {
+      tab: &#x27;show&#x27;,
+      title: &#x27;第11-12课&#x27;,
+      message: &#x27;Mustache语法（双大括号）&#x27;,
+      num: 233
+    },
+    // 局部组件
+    components: {
+      &#x27;my-ganace&#x27;: {
+        template: &#x27;&lt;div&gt;这是局部组件&lt;/div&gt;&#x27;
+      }
+    }
+  });
+  const app2 = new Vue({
+    el: &#x27;#app2&#x27;,
+    data: {
+      name: &#x27;ganace&#x27;
+    },
+    template: &#x27;&lt;my-component&gt;&lt;/my-component&gt;&#x27;
+  });
+&lt;/script&gt;
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+
+    </template>
+  </div>
+  <div id="app2"></div>
+
+  <script type="text/javascript">
+    Vue.component('my-component', {
+      template: "<div>我是全局组件-{{ name }}</div>",
+      // 使用vue.component定义组件
+      // 第一参数: 定义组件的名字
+      // 第二参数: 是个对象
+      // 全局组件: 可以在vue控制的任意模版下使用
+      data: function () {
+        // data字段必须是函数
+        return {
+          name: 'abc'
+        }
+      }
+    })
+    const app = new Vue({
+      el: '#app',
+      data: {
+        tab: 'show',
+        title: '第11-12课',
+        message: 'Mustache语法（双大括号）',
+        num: 233,
+        name: 'ganace'
+      },
+      // 局部组件
+      components: {
+        'my-ganace': {
+          template: '<div>这是局部组件</div>'
+        }
+      }
+    });
+    const app2 = new Vue({
+      el: '#app2',
+      data: {
+        name: 'ganace'
+      },
+      template: '<my-component></my-component>'
+    });
+  </script>
+</body>
+
+</html>

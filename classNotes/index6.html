@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue</title>
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>
+            第6课
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6 text-secondary">v-on:click计数器counter++</div>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+                  <h2>当前计数：{{ counter }}</h2>
+                  <button v-on:click='counter++'>+</button>
+                  <button @click='counter--'>-</button>
+                  <p></p>
+                  <button v-on:click='add'>add</button>
+                  <button @click='sub'>sub</button>
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+&lt;div id=&quot;app&quot;&gt;
+&lt;h1&gt;{{ title }}&lt;/h1&gt;
+  &lt;h2&gt;当前计数：{{ counter }}&lt;/h2&gt;
+  &lt;button v-on:click=&#x27;counter++&#x27;&gt;+&lt;/button&gt;
+  &lt;button @click=&#x27;counter--&#x27;&gt;-&lt;/button&gt;
+  &lt;p&gt;&lt;/p&gt;
+  &lt;button v-on:click=&#x27;add&#x27;&gt;add&lt;/button&gt;
+  &lt;button @click=&#x27;sub&#x27;&gt;sub&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;script src=&quot;../common/js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+  const app = new Vue({
+    el: &#x27;#app&#x27;,
+    data: {
+      title: &#x27;第6课计数器&#x27;,
+      counter: 0
+    },
+    methods: {
+      add: function () {
+        console.log(&#x27;add run&#x27;);
+        this.counter++;
+      },
+      sub: function () {
+        console.log(&#x27;sub run&#x27;);
+        this.counter--;
+      }
+    },
+  })
+&lt;/script&gt;
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+
+    </template>
+  </div>
+
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        tab: 'show',
+        title: '第6课计数器',
+        counter: 0
+      },
+      methods: {
+        add: function () {
+          console.log('add run');
+          this.counter++;
+        },
+        sub: function () {
+          console.log('sub run');
+          this.counter--;
+        }
+      },
+    })
+  </script>
+</body>
+
+</html>

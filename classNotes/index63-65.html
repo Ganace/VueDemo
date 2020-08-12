@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vue练习</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>第63-65课</q-toolbar-title>
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section class="text-secondary">
+              <div class="text-h6 text-secondary">{{ title }}</div>
+              <h6></h6>
+              <ul>
+                <li></li>
+              </ul>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+
+                  <!-- 子组件实例改变数据后，父、子组件中的数据一起改变 -->
+                  <!-- num1与num2的关系始终是：num2 = num1 * 100 -->
+                  <cpn :number1="num1" :number2="num2" @num1change="num1change" @num2change="num2change"></cpn>
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+&lt;div id=&quot;app&quot;&gt;
+  &lt;!-- 子组件实例改变数据后，父、子组件中的数据一起改变 --&gt;
+  &lt;!-- num1与num2的关系始终是：num2 = num1 * 100 --&gt;
+  &lt;cpn :number1=&quot;num1&quot; :number2=&quot;num2&quot; @num1change=&quot;num1change&quot; @num2change=&quot;num2change&quot;&gt;&lt;/cpn&gt;
+&lt;/div&gt;
+&lt;template id=&quot;cpn&quot;&gt;
+  &lt;div&gt;
+    &lt;!-- 使用v-model=&quot;dnumber1&quot;的话子组件数据改变了，父组件数据没改变 --&gt;
+    &lt;!-- 子组件数据改变以后，父组件数据也改变 --&gt;
+    &lt;p&gt;props:{{number1}}&lt;/p&gt;
+    &lt;p&gt;data:{{dnumber1}}&lt;/p&gt;
+    &lt;input type=&quot;text&quot; :value=&quot;dnumber1&quot; @input=&quot;num1Input&quot;&gt;
+    &lt;p&gt;props:{{number2}}&lt;/p&gt;
+    &lt;p&gt;data:{{dnumber2}}&lt;/p&gt;
+    &lt;input type=&quot;text&quot; v-bind:value=&quot;dnumber2&quot; v-on:input=&quot;num2Input&quot;&gt;
+    &lt;!-- 通过watch --&gt;
+    &lt;h6&gt;通过watch&lt;/h6&gt;
+    &lt;p&gt;props:{{number1}}&lt;/p&gt;
+    &lt;p&gt;data:{{dnumber1}}&lt;/p&gt;
+    &lt;input type=&quot;text&quot; v-model=&quot;dnumber1&quot;&gt;
+    &lt;p&gt;props:{{number2}}&lt;/p&gt;
+    &lt;p&gt;data:{{dnumber2}}&lt;/p&gt;
+    &lt;input type=&quot;text&quot; v-model=&quot;dnumber2&quot;&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+&lt;script src=&quot;../common/js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+  const app = new Vue({
+    el: &#x27;#app&#x27;,
+    data: {
+      tab: &#x27;show&#x27;,
+      title: &#x27;第63-65课 父子组件通信案例&#x27;,
+      messages: [
+        &#x27;v-for遍历数组&#x27;,
+      ],
+      num1: 1,
+      num2: 0
+    },
+    methods: {
+      num1change(value){
+        this.num1 = parseFloat(value)
+      },
+      num2change(value){
+        this.num2 = parseFloat(value)
+      }
+    },
+    components: {
+      cpn: {
+        template: &#x27;#cpn&#x27;,
+        props: {
+          number1: Number,
+          number2: Number
+        },
+        data() {
+          return {
+            dnumber1: this.number1,
+            dnumber2: this.number2
+          }
+        },
+        methods: {
+          num1Input(event){
+            // 1.将input中的value赋值到dnumber中
+            this.dnumber1 = event.target.value;
+            // 2.为了让父组件可以修改值，发出一个时间
+            this.$emit(&#x27;num1change&#x27;,this.dnumber1);
+            // 3.同时修改dnumber2的值
+            this.dnumber2 = this.dnumber1 * 100;
+            this.$emit(&#x27;num2change&#x27;,this.dnumber2);
+          },
+          num2Input(event){
+            this.dnumber2 = event.target.value;
+            this.$emit(&#x27;num2change&#x27;,this.dnumber2);
+            this.dnumber1 = this.dnumber2 / 100;
+            this.$emit(&#x27;num1change&#x27;,this.dnumber1);
+          },
+        },
+        // 通过watch来修改，监听相同函数名的属性改变
+        watch: {
+          dnumber1(newValue){
+            this.dnumber2 = newValue * 100;
+            this.$emit(&#x27;num2change&#x27;,this.dnumber2);
+          },
+          dnumber2(newValue){
+            this.dnumber1 = newValue / 100;
+            this.$emit(&#x27;num1change&#x27;,this.dnumber1);
+          },
+        }
+      }
+    }
+  });
+&lt;/script&gt;
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+    </template>
+  </div>
+  <template id="cpn">
+    <div>
+      <!-- 使用v-model="dnumber1"的话子组件数据改变了，父组件数据没改变 -->
+      <!-- 子组件数据改变以后，父组件数据也改变 -->
+      <p>props:{{number1}}</p>
+      <p>data:{{dnumber1}}</p>
+      <input type="text" :value="dnumber1" @input="num1Input">
+      <p>props:{{number2}}</p>
+      <p>data:{{dnumber2}}</p>
+      <input type="text" v-bind:value="dnumber2" v-on:input="num2Input">
+      <!-- 通过watch -->
+      <h6>通过watch</h6>
+      <p>props:{{number1}}</p>
+      <p>data:{{dnumber1}}</p>
+      <input type="text" v-model="dnumber1">
+      <p>props:{{number2}}</p>
+      <p>data:{{dnumber2}}</p>
+      <input type="text" v-model="dnumber2">
+    </div>
+  </template>
+  <script type="text/javascript">
+    const app = new Vue({
+      el: '#app',
+      data: {
+        tab: 'show',
+        title: '第63-65课 父子组件通信案例',
+        messages: [
+          '',
+        ],
+        num1: 1,
+        num2: 0
+      },
+      methods: {
+        num1change(value) {
+          this.num1 = parseFloat(value)
+        },
+        num2change(value) {
+          this.num2 = parseFloat(value)
+        }
+      },
+      components: {
+        cpn: {
+          template: '#cpn',
+          props: {
+            number1: Number,
+            number2: Number
+          },
+          data() {
+            return {
+              dnumber1: this.number1,
+              dnumber2: this.number2
+            }
+          },
+          methods: {
+            num1Input(event) {
+              // 1.将input中的value赋值到dnumber中
+              this.dnumber1 = event.target.value;
+              // 2.为了让父组件可以修改值，发出一个时间
+              this.$emit('num1change', this.dnumber1);
+              // 3.同时修改dnumber2的值
+              this.dnumber2 = this.dnumber1 * 100;
+              this.$emit('num2change', this.dnumber2);
+            },
+            num2Input(event) {
+              this.dnumber2 = event.target.value;
+              this.$emit('num2change', this.dnumber2);
+              this.dnumber1 = this.dnumber2 / 100;
+              this.$emit('num1change', this.dnumber1);
+            },
+          },
+          // 通过watch来修改，监听相同函数名的属性改变
+          watch: {
+            dnumber1(newValue) {
+              this.dnumber2 = newValue * 100;
+              this.$emit('num2change', this.dnumber2);
+            },
+            dnumber2(newValue) {
+              this.dnumber1 = newValue / 100;
+              this.$emit('num1change', this.dnumber1);
+            },
+          }
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

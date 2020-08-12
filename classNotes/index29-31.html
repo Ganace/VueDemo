@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vue练习</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>第29-31课</q-toolbar-title>
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section class="text-secondary">
+              <div class="text-h6 text-secondary">{{ title }} v-on</div>
+              <h6>v-on的基本使用和语法糖</h6>
+              <ul>
+                <li>v-on:click="counter++"</li>
+                <li>@click="increment"</li>
+              </ul>
+              <h6>v-on的参数传递问题</h6>
+              <ul>
+                <li>
+                  1.v-on事件监听时，如果该方法不需要额外参数，那么方法后的()可以不添加，做省略处理
+                  <ul>
+                    <li>@click="btn2Click"</li>
+                  </ul>
+                </li>
+                <li>
+                  2.如果需要同时传入某个参数，同时需要event，可以通过$event传入事件
+                  <ul>
+                    <li>@click="btn2Click(123)"</li>
+                    <li>@click="btn2Click"</li>
+                    <li>在事件定义时，写方法时省略了小括号，但是方法本身需要一个参数,这个时候，Vue会默认将浏览器生产的event事件对象作为参数传入到方法中</li>
+                    <li>方法定义时，我们需要用event对象，同时又需要其他参数</li>
+                    <li>在调用方式，如何手动获取浏览器参数的event对象：$event</li>
+                    <li>@click="btn3Click"------能取到$event</li>
+                    <li>@click="btn3Click(123, $event)"------能取到$event</li>
+                    <li>@click="btn3Click('abc', $event)"------能取到$event</li>
+                    <li>@click="btn3Click(123)" ------$event为undefined</li>
+                    <li>@click="btn3Click()"------$event为undefined</li>
+                  </ul>
+                </li>
+              </ul>
+              <h6>v-on的修饰符使用 </h6>
+              <ul>
+                <li>.stop修饰符的使用：阻止btn1Click冒泡</li>
+                <li>.prevent的修饰符的使用：阻止默认事件</li>
+                <li>.[keyCode|keyAlias]的修饰符的使用：监听某个键盘的键帽</li>
+                <li>
+                  .native的修饰符的使用：监听组件的原生事件
+                  <ul>
+                    <li> .native - 主要是给自定义的组件添加原生事件，可以理解为该修饰符的作用就是把一个vue组件转化为一个普通的HTML标签，并且该修饰符对普通HTML标签是没有任何作用的。</li>
+                  </ul>
+                </li>
+                <li>.once的修饰符的使用：只触发一次回调事件(@click.once="btn1Click")</li>
+              </ul>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+
+                  <h6 v-for="msg in messages">{{ msg }}</h6>
+
+                  <h5>29----v-on基本使用</h5>
+                  <p>{{counter}}</p>
+
+                  <!-- <button v-on:click="counter++">+</button> -->
+                  <!-- <button v-on:click="counter++">-</button> -->
+
+                  <!-- <button v-on:click="increment">+</button> -->
+                  <!-- <button v-on:click="decrement">-</button> -->
+
+                  <button @click="increment">+</button>
+                  <button @click="decrement">-</button>
+
+                  <h5>30----v-on传递参数问题</h5>
+                  <p>1.v-on事件监听时，如果该方法不需要额外参数，那么方法后的()可以不添加，做省略处理</p>
+                  <p>2.如果需要同时传入某个参数，同时需要event，可以通过$event传入事件</p>
+                  <!-- 事件调用的方法没有参数 -->
+                  <button @click="btn1Click">按钮1</button>
+                  <p>在事件定义时，写方法时省略了小括号，但是方法本身需要一个参数,这个时候，Vue会默认将浏览器生产的event事件对象作为参数传入到方法中</p>
+                  <button @click="btn2Click(123)">按钮2</button>
+                  <button @click="btn2Click()">按钮2</button>
+                  <button @click="btn2Click">按钮2</button>
+                  <p>方法定义时，我们需要用event对象，同时又需要其他参数</p>
+                  <p>在调用方式，如何手动获取浏览器参数的event对象：$event</p>
+                  <button @click="btn3Click">按钮3</button>
+                  <button @click="btn3Click(123)">按钮3</button>
+                  <button @click="btn3Click()">按钮3</button>
+                  <button @click="btn3Click(123, $event)">按钮3正确写法</button>
+                  <button @click="btn3Click('abc', $event)">按钮3正确写法</button>
+
+                  <h5>31----v-on的修饰符使用</h5>
+                  <p>.stop修饰符的使用：阻止btn1Click冒泡</p>
+                  <div @click="btn2Click">
+                    <button @click="btn1Click">按钮1</button>
+                  </div>
+                  <div @click="btn2Click">
+                    <button @click.stop="btn1Click">按钮1阻止</button>
+                  </div>
+                  <p>.prevent的修饰符的使用：阻止默认事件</p>
+                  <form action="baidu">
+                    <input type="submit" value="提交">
+                  </form>
+                  <form action="baidu">
+                    <input type="submit" value="阻止提交" @click.prevent="submiClick">
+                  </form>
+                  <p>.[keyCode|keyAlias]的修饰符的使用：监听某个键盘的键帽</p>
+                  <input type="text" @keyup="btn1Click">
+                  <input type="text" @keyup.enter="btn1Click">
+                  <p>.native的修饰符的使用：监听组件的原生事件</p>
+                  <button @click.native="btn1Click">按钮1native无效，错误用法</button>
+                  <p>.once的修饰符的使用：只触发一次回调事件</p>
+                  <button @click="btn1Click">按钮1</button>
+                  <button @click.once="btn1Click">按钮1只能第一次点触发</button>
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+&lt;div id=&quot;app&quot;&gt;
+  &lt;h2 v-for=&quot;msg in messages&quot;&gt;{{ msg }}&lt;/h2&gt;
+
+  &lt;h5&gt;29----v-on基本使用&lt;/h5&gt;
+  &lt;p&gt;{{counter}}&lt;/p&gt;
+
+  &lt;!-- &lt;button v-on:click=&quot;counter++&quot;&gt;+&lt;/button&gt; --&gt;
+  &lt;!-- &lt;button v-on:click=&quot;counter++&quot;&gt;-&lt;/button&gt; --&gt;
+
+  &lt;!-- &lt;button v-on:click=&quot;increment&quot;&gt;+&lt;/button&gt; --&gt;
+  &lt;!-- &lt;button v-on:click=&quot;decrement&quot;&gt;-&lt;/button&gt; --&gt;
+
+  &lt;button @click=&quot;increment&quot;&gt;+&lt;/button&gt;
+  &lt;button @click=&quot;decrement&quot;&gt;-&lt;/button&gt;
+
+  &lt;h5&gt;30----v-on传递参数问题&lt;/h5&gt;
+  &lt;p&gt;1.v-on事件监听时，如果该方法不需要额外参数，那么方法后的()可以不添加，做省略处理&lt;/p&gt;
+  &lt;p&gt;2.如果需要同时传入某个参数，同时需要event，可以通过$event传入事件&lt;/p&gt;
+  &lt;!-- 事件调用的方法没有参数 --&gt;
+  &lt;button @click=&quot;btn1Click&quot;&gt;按钮1&lt;/button&gt;
+  &lt;p&gt;在事件定义时，写方法时省略了小括号，但是方法本身需要一个参数,这个时候，Vue会默认将浏览器生产的event事件对象作为参数传入到方法中&lt;/p&gt;
+  &lt;button @click=&quot;btn2Click(123)&quot;&gt;按钮2&lt;/button&gt;
+  &lt;button @click=&quot;btn2Click()&quot;&gt;按钮2&lt;/button&gt;
+  &lt;button @click=&quot;btn2Click&quot;&gt;按钮2&lt;/button&gt;
+  &lt;p&gt;方法定义时，我们需要用event对象，同时又需要其他参数&lt;/p&gt;
+  &lt;p&gt;在调用方式，如何手动获取浏览器参数的event对象：$event&lt;/p&gt;
+  &lt;button @click=&quot;btn3Click&quot;&gt;按钮3&lt;/button&gt;
+  &lt;button @click=&quot;btn3Click(123)&quot;&gt;按钮3&lt;/button&gt;
+  &lt;button @click=&quot;btn3Click()&quot;&gt;按钮3&lt;/button&gt;
+  &lt;button @click=&quot;btn3Click(123, $event)&quot;&gt;按钮3正确写法&lt;/button&gt;
+  &lt;button @click=&quot;btn3Click(&#x27;abc&#x27;, $event)&quot;&gt;按钮3正确写法&lt;/button&gt;
+
+  &lt;h5&gt;31----v-on的修饰符使用&lt;/h5&gt;
+  &lt;p&gt;.stop修饰符的使用：阻止btn1Click冒泡&lt;/p&gt;
+  &lt;div @click=&quot;btn2Click&quot;&gt;
+    &lt;button @click=&quot;btn1Click&quot;&gt;按钮1&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div @click=&quot;btn2Click&quot;&gt;
+    &lt;button @click.stop=&quot;btn1Click&quot;&gt;按钮1阻止&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;p&gt;.prevent的修饰符的使用：阻止默认事件&lt;/p&gt;
+  &lt;form action=&quot;baidu&quot;&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;提交&quot;&gt;
+  &lt;/form&gt;
+  &lt;form action=&quot;baidu&quot;&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;阻止提交&quot; @click.prevent=&quot;submiClick&quot;&gt;
+  &lt;/form&gt;
+  &lt;p&gt;.[keyCode|keyAlias]的修饰符的使用：监听某个键盘的键帽&lt;/p&gt;
+  &lt;input type=&quot;text&quot; @keyup=&quot;btn1Click&quot;&gt;
+  &lt;input type=&quot;text&quot; @keyup.enter=&quot;btn1Click&quot;&gt;
+  &lt;p&gt;.native的修饰符的使用：监听组件的原生事件&lt;/p&gt;
+  &lt;button @click.native=&quot;btn1Click&quot;&gt;按钮1native无效，错误用法&lt;/button&gt;
+  &lt;p&gt;.once的修饰符的使用：只触发一次回调事件&lt;/p&gt;
+  &lt;button @click=&quot;btn1Click&quot;&gt;按钮1&lt;/button&gt;
+  &lt;button @click.once=&quot;btn1Click&quot;&gt;按钮1只能第一次点触发&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;script src=&quot;../common/js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+  const app = new Vue({
+    el: &#x27;#app&#x27;,
+    data: {
+      tab: &#x27;show&#x27;,
+      title: &#x27;第29-31课&#x27;,
+      messages: [
+        &#x27;v-on基本使用和语法糖&#x27;,
+        &#x27;v-on的参数传递问题&#x27;,
+        &#x27;v-on的修饰符使用&#x27;,
+      ],
+      counter: 0
+    },
+    methods: {
+      increment() {
+        this.counter++;
+      },
+      decrement() {
+        this.counter--;
+      },
+      btn1Click() {
+        console.log(&#x27;btn1Click&#x27;);
+      },
+      btn2Click(event) {
+        console.log(&#x27;btn2Click&#x27;, event);
+      },
+      btn3Click(a, event) {
+        console.log(&#x27;btn2Click&#x27;, a, event);
+      },
+      submiClick() {
+        console.log(&#x27;submiClick&#x27;);
+      }
+    }
+  });
+&lt;/script&gt;
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+
+    </template>
+  </div>
+
+  <script type="text/javascript">
+    const app = new Vue({
+      el: '#app',
+      data: {
+        tab: 'show',
+        title: '第29-31课',
+        messages: [
+          'v-on基本使用和语法糖',
+          'v-on的参数传递问题',
+          'v-on的修饰符使用',
+        ],
+        counter: 0
+      },
+      methods: {
+        increment() {
+          this.counter++;
+        },
+        decrement() {
+          this.counter--;
+        },
+        btn1Click() {
+          console.log('btn1Click');
+        },
+        btn2Click(event) {
+          console.log('btn2Click', event);
+        },
+        btn3Click(a, event) {
+          console.log('btn2Click', a, event);
+        },
+        submiClick() {
+          console.log('submiClick');
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

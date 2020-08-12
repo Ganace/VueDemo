@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vue练习</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>第66-67课</q-toolbar-title>
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section class="text-secondary">
+              <div class="text-h6 text-secondary">{{ title }}</div>
+              <h6>父访问子-children-refs</h6>
+              <ul>
+                <li>使用$children或者$refs</li>
+                <li>this.$children是一个数组类型，包含所有子组件对象</li>
+              </ul>
+              <h6>子访问父-parent-root</h6>
+              <ul>
+                <li>使用$parent访问父组件</li>
+                <li>使用$root访问根组件</li>
+              </ul>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+                  <cpn ref="cpn"></cpn>
+                  <button @click="btnClick">按钮1-父访问子</button>
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+&lt;div id=&quot;app&quot;&gt;
+  &lt;cpn ref=&quot;cpn&quot;&gt;&lt;/cpn&gt;
+  &lt;button @click=&quot;btnClick&quot;&gt;按钮1-父访问子&lt;/button&gt;
+&lt;/div&gt;
+&lt;template id=&quot;cpn&quot;&gt;
+  &lt;div&gt;
+    &lt;p&gt;cpn子组件&lt;/p&gt;
+    &lt;button @click=&quot;btn2Click&quot;&gt;按钮2-子访问父&lt;/button&gt;
+    &lt;ccpn&gt;&lt;/ccpn&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+&lt;template id=&quot;ccpn&quot;&gt;
+  &lt;div&gt;
+    &lt;p&gt;ccpn子组件&lt;/p&gt;
+    &lt;button @click=&quot;btn3Click&quot;&gt;按钮3-子访问父&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script src=&quot;../common/js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+  const app = new Vue({
+    el: &#x27;#app&#x27;,
+    data: {
+      tab: &#x27;show&#x27;,
+      title: &#x27;第66-67课 父访问子-children-refs,子访问父-parent-root&#x27;,
+      messages: [
+        &#x27;&#x27;,
+      ],
+      message: &#x27;ganace&#x27;
+    },
+    methods: {
+      // 一、父访问子
+      btnClick() {
+        // 1.$children
+        // console.log(this.$children);
+        // for(let c of this.$children){
+        //   console.log(c.name);
+        //   c.showMessage();
+        // }
+        // 2.$ref
+        console.log(this.$refs.cpn);
+        console.log(this.$refs.cpn.name);
+        this.$refs.cpn.showMessage();
+      }
+    },
+    components: {
+      cpn: {
+        template: &#x27;#cpn&#x27;,
+        data() {
+          return {
+            name: &#x27;子组件name&#x27;
+          }
+        },
+        methods: {
+          showMessage() {
+            console.log(&#x27;showMessage&#x27;);
+          },
+          // 子访问父组件
+          btn2Click() {
+            // 1.访问父组件$parent
+            console.log(this.$parent)
+          }
+        },
+        components: {
+          ccpn: {
+            template: &#x27;#ccpn&#x27;,
+            methods: {
+              btn3Click() {
+                console.log(this.$parent);
+                console.log(this.$parent.name);
+                // 访问根组件
+                console.log(&#x27;根组件&#x27;,this.$root.message);
+              }
+            },
+          }
+        }
+      }
+    }
+  });
+&lt;/script&gt;
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+    </template>
+  </div>
+  <template id="cpn">
+    <div>
+      <p>cpn子组件</p>
+      <button @click="btn2Click">按钮2-子访问父</button>
+      <ccpn></ccpn>
+    </div>
+  </template>
+  <template id="ccpn">
+    <div>
+      <p>ccpn子组件</p>
+      <button @click="btn3Click">按钮3-子访问父</button>
+    </div>
+  </template>
+  <script type="text/javascript">
+    const app = new Vue({
+      el: '#app',
+      data: {
+        tab: 'show',
+        title: '第66-67课 父访问子-children-refs,子访问父-parent-root',
+        messages: [
+          '',
+        ],
+        message: 'ganace'
+      },
+      methods: {
+        // 一、父访问子
+        btnClick() {
+          // 1.$children
+          // console.log(this.$children);
+          // for(let c of this.$children){
+          //   console.log(c.name);
+          //   c.showMessage();
+          // }
+          // 2.$ref
+          console.log(this.$refs.cpn);
+          console.log(this.$refs.cpn.name);
+          this.$refs.cpn.showMessage();
+        }
+      },
+      components: {
+        cpn: {
+          template: '#cpn',
+          data() {
+            return {
+              name: '子组件name'
+            }
+          },
+          methods: {
+            showMessage() {
+              console.log('showMessage');
+            },
+            // 子访问父组件
+            btn2Click() {
+              // 1.访问父组件$parent
+              console.log(this.$parent)
+            }
+          },
+          components: {
+            ccpn: {
+              template: '#ccpn',
+              methods: {
+                btn3Click() {
+                  console.log(this.$parent);
+                  console.log(this.$parent.name);
+                  // 访问根组件
+                  console.log('根组件', this.$root.message);
+                }
+              },
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

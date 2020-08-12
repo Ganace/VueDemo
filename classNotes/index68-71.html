@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vue练习</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>第68课</q-toolbar-title>
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section class="text-secondary">
+              <div class="text-h6 text-secondary">{{ title }}</div>
+              <h6>slot插槽的基本使用</h6>
+              <ul>
+                <li>1.插槽的基本使用&lt;slot&gt;&lt;/slot&gt;</li>
+                <li>2.插槽的默认值 &lt;slot&gt;&lt;button&gt;默认&lt;/button&gt;&lt;/slot&gt;</li>
+                <li>3.如果有多个值，同时放入到组件中进行替换时，一起作为替换元素</li>
+              </ul>
+              <h6>slot具名插槽的使用</h6>
+              <ul>
+                <li>1.在模板中定义插槽名&lt;slot name=&quot;left&quot;&gt;&lt;/slot&gt;</li>
+                <li>2.在实例化时指定插槽名&lt;button slot=&quot;left&quot;&gt;&lt;/button&gt;</li>
+              </ul>
+              <h6>编译的作用域</h6>
+              <h6>slot作用域插槽的使用</h6>
+              <ul>
+                <li>父组件替换插槽的标签，但是内容由子组件来提供</li>
+                <li></li>
+                <li></li>
+              </ul>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+                  <cpn></cpn>
+                  <cpn>
+                    <div>123</div>
+                    <p>123</p>
+                    <button>123</button>
+                    <button slot="left">修改左边</button>
+                    <button slot="right">修改右边</button>
+                    <button slot="center">修改中间</button>
+                  </cpn>
+                  <cpn v-show="isShow"></cpn>
+                  <cpn>
+                    <!-- 目的是获取子组件中的pLanguages,2.5.x一下必须用template,以上不用 -->
+                    <template slot="sp" slot-scope="slot">
+                      <span v-for="item in slot.data">{{item}} - </span>
+                      <br>
+                      <span>{{slot.data.join(' * ')}}</span>
+                      <br>
+                      <span>{{slot.msgs.join(' * ')}}</span>
+                    </template>
+                  </cpn>
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+&lt;div id=&quot;app&quot;&gt;
+  &lt;cpn&gt;&lt;/cpn&gt;
+  &lt;cpn&gt;
+    &lt;div&gt;123&lt;/div&gt;
+    &lt;p&gt;123&lt;/p&gt;
+    &lt;button&gt;123&lt;/button&gt;
+    &lt;button slot=&quot;left&quot;&gt;修改左边&lt;/button&gt;
+    &lt;button slot=&quot;right&quot;&gt;修改右边&lt;/button&gt;
+    &lt;button slot=&quot;center&quot;&gt;修改中间&lt;/button&gt;
+  &lt;/cpn&gt;
+  &lt;cpn v-show=&quot;isShow&quot;&gt;&lt;/cpn&gt;
+  &lt;cpn&gt;
+      &lt;!-- 目的是获取子组件中的pLanguages,2.5.x一下必须用template,以上不用 --&gt;
+      &lt;template slot=&quot;sp&quot; slot-scope=&quot;slot&quot;&gt;
+        &lt;span v-for=&quot;item in slot.data&quot;&gt;{{item}} - &lt;/span&gt;
+        &lt;br&gt;
+        &lt;span&gt;{{slot.data.join(&#x27; * &#x27;)}}&lt;/span&gt;
+        &lt;br&gt;
+        &lt;span&gt;{{slot.msgs.join(&#x27; * &#x27;)}}&lt;/span&gt;
+      &lt;/template&gt;
+  &lt;/cpn&gt;
+&lt;/div&gt;
+&lt;template id=&quot;cpn&quot;&gt;
+  &lt;div style=&quot;border-bottom: 2px solid #ccabfc;padding: 10px;&quot;&gt;
+    &lt;p&gt;cpn组件&lt;/p&gt;
+    &lt;slot&gt;不具名插槽&lt;/slot&gt;
+    &lt;slot name=&quot;left&quot;&gt;
+      &lt;button&gt;具名默认左边&lt;/button&gt;
+    &lt;/slot&gt;
+    &lt;slot name=&quot;center&quot;&gt;
+      &lt;button&gt;具名默认中间&lt;/button&gt;
+    &lt;/slot&gt;
+    &lt;slot name=&quot;right&quot;&gt;
+      &lt;button&gt;具名默认右边&lt;/button&gt;
+    &lt;/slot&gt;
+    &lt;button v-show=&quot;isShow&quot;&gt;cpn组件-作用域&lt;/button&gt;
+    &lt;br&gt;
+    &lt;slot name=&quot;sp&quot; :data=&quot;pLanguages&quot; :msgs=&quot;msgs&quot;&gt;
+      &lt;ul&gt;
+        &lt;li v-for=&quot;item in pLanguages&quot;&gt;{{item}}&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/slot&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script src=&quot;../common/js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+  const app = new Vue({
+    el: &#x27;#app&#x27;,
+    data: {
+      tab: &#x27;show&#x27;,
+      title: &#x27;第68-71课 slot插槽[基本使用，具名插槽,作用域插槽]&#x27;,
+      messages: [
+        &#x27;&#x27;,
+      ],
+      isShow: true
+    },
+    components: {
+      cpn: {
+        template: &#x27;#cpn&#x27;,
+        data() {
+          return {
+            isShow: false,
+            pLanguages: [&#x27;JavaScript&#x27;, &#x27;C++&#x27;, &#x27;Java&#x27;, &#x27;c#&#x27;, &#x27;Python&#x27;],
+            msgs: [&#x27;abc&#x27;,&#x27;acc&#x27;,&#x27;bcc&#x27;]
+          }
+        },
+      }
+    }
+  });
+&lt;/script&gt;
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+    </template>
+  </div>
+  <template id="cpn">
+    <div style="border-bottom: 2px solid #ccabfc;padding: 10px;">
+      <p>cpn组件</p>
+      <slot>不具名插槽</slot>
+      <slot name="left">
+        <button>具名默认左边</button>
+      </slot>
+      <slot name="center">
+        <button>具名默认中间</button>
+      </slot>
+      <slot name="right">
+        <button>具名默认右边</button>
+      </slot>
+      <button v-show="isShow">cpn组件-作用域</button>
+      <br>
+      <slot name="sp" :data="pLanguages" :msgs="msgs">
+        <ul>
+          <li v-for="item in pLanguages">{{item}}</li>
+        </ul>
+      </slot>
+    </div>
+  </template>
+  <script type="text/javascript">
+    const app = new Vue({
+      el: '#app',
+      data: {
+        tab: 'show',
+        title: '第68-71课 slot插槽[基本使用，具名插槽,作用域插槽]',
+        messages: [
+          '',
+        ],
+        isShow: true
+      },
+      components: {
+        cpn: {
+          template: '#cpn',
+          data() {
+            return {
+              isShow: false,
+              pLanguages: ['JavaScript', 'C++', 'Java', 'c#', 'Python'],
+              msgs: ['abc', 'acc', 'bcc']
+            }
+          },
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

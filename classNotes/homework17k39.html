@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vue练习</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+<style>
+  .active{
+    color: red;
+  }
+</style>
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="'../classNotes/'+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="../classNotes/menu.js"></script>
+  <!-- 第17课实践作业需求：灵活使用v-for&v-bind。 -->
+  <!-- 点击列表中的哪一项，那么该项文字变成红色 -->
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>第17课实践作业</q-toolbar-title>
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section class="text-secondary">
+              <div class="text-h6 text-secondary">{{ title }}</div>
+              <h6></h6>
+              <ul>
+                <li></li>
+              </ul>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+                  <p>第17课实践作业---1(60分)</p>
+                  <ul>
+                    <li v-for="m in musics" :class="{active:m.isActive}" @click="clickActive(m,musics)">{{ m.name }}
+                    </li>
+                  </ul>
+                  <p>第17课实践作业---2(90分)</p>
+                  <ul>
+                    <li v-for="(m,index) in musics" :class="{active: index == inNum}" @click="clickIn(index)">
+                      {{ m.name }}</li>
+                  </ul>
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+&lt;style&gt;
+.active{
+  color: red;
+}
+&lt;/style&gt;
+&lt;script src=&quot;../common/js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;div id=&quot;app&quot;&gt;
+  &lt;p&gt;第17课实践作业---1&lt;/p&gt;
+  &lt;ul&gt;
+    &lt;li v-for=&quot;m in musics&quot; :class=&quot;{active:m.isActive}&quot; @click=&quot;clickActive(m,musics)&quot;&gt;{{ m.name }}
+    &lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;p&gt;第17课实践作业---2&lt;/p&gt;
+  &lt;ul&gt;
+    &lt;li v-for=&quot;(m,index) in musics&quot; :class=&quot;{active: index == inNum}&quot; @click=&quot;clickIn(index)&quot;&gt;
+      {{ m.name }}&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+  const app = new Vue({
+    el: &#x27;#app&#x27;,
+    data: {
+      tab: &#x27;show&#x27;,
+      title: &#x27;第17课实践作业 需求：灵活使用v-for&amp;v-bind。点击列表中的哪一项，那么该项文字变成红色&#x27;,
+      musics: [{
+          name: &#x27;qianqian&#x27;,
+          isActive: false
+        },
+        {
+          name: &#x27;kuwo&#x27;,
+          isActive: false
+        },
+        {
+          name: &#x27;kugou&#x27;,
+          isActive: false
+        },
+        {
+          name: &#x27;wangyiyun&#x27;,
+          isActive: false
+        }
+      ],
+      inNum: 0
+    },
+    methods: {
+      clickActive: function (m) {
+        this.musics.forEach(element =&gt; {
+          element.isActive = false
+        });
+        m.isActive = true;
+      },
+      clickIn: function (i) {
+        this.inNum = i;
+      }
+    }
+  });
+&lt;/script&gt;
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+    </template>
+</div>
+
+<script type="text/javascript">
+  const app = new Vue({
+    el: '#app',
+    data: {
+      tab: 'show',
+      title: '第17课实践作业 需求：灵活使用v-for&v-bind。点击列表中的哪一项，那么该项文字变成红色',
+      musics: [{
+          name: 'qianqian',
+          isActive: false
+        },
+        {
+          name: 'kuwo',
+          isActive: false
+        },
+        {
+          name: 'kugou',
+          isActive: false
+        },
+        {
+          name: 'wangyiyun',
+          isActive: false
+        }
+      ],
+      inNum: 0
+    },
+    methods: {
+      clickActive: function (m) {
+        this.musics.forEach(element => {
+          element.isActive = false
+        });
+        m.isActive = true;
+      },
+      clickIn: function (i) {
+        this.inNum = i;
+      }
+    }
+  });
+</script>
+</body>
+
+</html>

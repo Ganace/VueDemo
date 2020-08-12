@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vue练习</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>第116-124课 keep-alive,TabBar案例</q-toolbar-title>
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section class="text-secondary">
+              <div class="text-h6 text-secondary">{{ title }}</div>
+              <h6>keep-alive遇见vue-router</h6>
+              <ul>
+                <li>keep-alive是Vue内置的一个组件，可以使被包含的组件保留状态，或避免重新渲染</li>
+                <li>router-view也是一个组件，如果直接被包在keep-alive里面，所有路径匹配到的视图组件都会被缓存</li>
+                <li>keep-alive -> activated/deactivated</li>
+                <li>首页中使用path属性记录离开时的路径，在beforeRouteLeave中记录</li>
+              </ul>
+              <h6>keep-alive属性介绍</h6>
+              <ul>
+                <li>include -字符串或正则表达，只有匹配的组件会被缓存</li>
+                <li>exclude -字符串或正则表达式，任何匹配的组件都不会被缓存</li>
+                <li>
+                  填入组件name，正则表达式
+                  <pre v-pre>
+&lt;keep-alive exclude=&quot;Profile,User&quot;&gt;
+  &lt;router-view /&gt;
+&lt;/keep-alive&gt;
+                  </pre>
+                </li>
+              </ul>
+              <h6>TabBar基本结构的搭建</h6>
+              <ul>
+                <li>
+                  实现思路
+                  <ul>
+                    <li>1.自定义TabBar组件，在App中使用；让TabBar出于底部，并且设置相关样式</li>
+                    <li>2.TabBar显示内容由外界决定：定义插槽，flex布局平分TabBar</li>
+                    <li>3.自定义TabBarItem，可以传入 图片和文字：定义TabBarItem，并且定义两个插槽：图片、文字；给两个插槽外层包装div，用于设置样式；填充插槽，实现底部TabBar的效果</li>
+                  </ul>
+                </li>
+              </ul>
+              <h6>TabBar-文件路径引用问题</h6>
+              <ul>
+                <li>
+                  build\webpack.base.conf.js
+                  <pre>
+module.exports = {
+  resolve: {
+    extensions: [&#x27;.js&#x27;, &#x27;.vue&#x27;, &#x27;.json&#x27;],
+    alias: {
+      &#x27;@&#x27;: resolve(&#x27;src&#x27;),
+      &#x27;assets&#x27;: resolve(&#x27;src/assets&#x27;),
+      &#x27;components&#x27;: resolve(&#x27;src/components&#x27;),
+      &#x27;views&#x27;: resolve(&#x27;src/views&#x27;),
+    }
+  },
+}
+                  </pre>
+                </li>
+              </ul>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+                  123
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+&lt;script src=&quot;../common/js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;div id=&quot;app&quot;&gt;
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+    </template>
+  </div>
+  <script type="text/javascript">
+    const app = new Vue({
+      el: '#app',
+      data: {
+        tab: 'show',
+        title: '第116-124课 keep-alive,TabBar案例',
+        messages: [
+          '',
+        ],
+      }
+    });
+  </script>
+</body>
+
+</html>

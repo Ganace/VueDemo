@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue</title>
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>第9-10课</q-toolbar-title>
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6 text-secondary">{{ title }}</div>
+              <p>
+                <div class="text-h6"></div><br />
+                1.beforeCreate<br />
+                在实例初始化之后，数据观测(data observer) 和 event/watcher 事件配置（未完成）之前被调用。<br />
+
+                2.created：完成了 data 数据的初始化（数据和data属性的绑定），没有el选项<br />
+                实例已经创建完成之后被调用。在这一步，实例已完成以下的配置：数据观测(data observer)，属性和方法的运算， watch/
+                event 事件回调。然而，挂载阶段还没开始，$el
+                属性目前不可见。<br />
+
+                3.beforeMount<br />
+                在挂载开始之前被调用：相关的 render 函数首次被调用。<br />
+
+                4.mounted<br />
+                el 被新创建的 vm.$el 替换，并挂载到实例上，之后调用该钩子。<br />
+
+                5.beforeUpdate<br />
+                数据更新时调用，发生在虚拟 DOM 重新渲染和打补丁之前。 你可以在这个钩子中进一步地更改状态，这不会触发附加的重渲染过程。<br />
+
+                6.updated<br />
+                由于数据更改导致的虚拟 DOM 重新渲染和打补丁，在这之后会调用该钩子。<br />
+
+                7.beforeDestroy： 你确认删除XX吗？<br />
+                8.destroyed ：当前组件已被删除，清空相关内容
+              </p>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+                  <h2>{{ counter }}</h2>
+                  <button v-on:click='counter++'>+</button>
+                  <button @click='counter--'>-</button>
+                  <p></p>
+                  <button v-on:click='add'>add</button>
+                  <button @click='sub'>sub</button>
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+&lt;div id=&quot;app&quot;&gt;
+  &lt;h2&gt;{{ counter }}&lt;/h2&gt;
+  &lt;button v-on:click=&#x27;counter++&#x27;&gt;+&lt;/button&gt;
+  &lt;button @click=&#x27;counter--&#x27;&gt;-&lt;/button&gt;
+  &lt;p&gt;&lt;/p&gt;
+  &lt;button v-on:click=&#x27;add&#x27;&gt;add&lt;/button&gt;
+  &lt;button @click=&#x27;sub&#x27;&gt;sub&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;script src=&quot;../common/js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+  const obj = {
+    title: &#x27;第9-10课 Vue生命周期、钩子&#x27;,
+    counter: 0
+  };
+  const app = new Vue({
+    el: &#x27;#app&#x27;,
+    data: obj,
+    methods: {
+      add: function () {
+        this.counter++;
+      },
+      sub: function () {
+        this.counter--;
+      }
+    },
+    beforeCreate() {
+      console.log(&#x27;beforeCreate&#x27;);
+    },
+    created: function () {
+      console.log(&#x27;created&#x27;);
+    },
+    beforeMount() {
+      console.log(&#x27;beforeMount&#x27;);
+    },
+    mounted() {
+      console.log(&#x27;mounted&#x27;);
+    },
+    beforeUpdate() {
+      console.log(&#x27;beforeUpdate&#x27;);
+    },
+    updated() {
+      console.log(&#x27;updated&#x27;);
+    },
+    beforeDestroy() {
+      console.log(&#x27;befoerDistory&#x27;);
+    },
+    destroyed() {
+      console.log(&#x27;distoryed&#x27;);
+    },
+  })
+&lt;/script&gt;
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+
+    </template>
+    <h1>{{ title }}</h1>
+    <h2>{{ counter }}</h2>
+    <button v-on:click='counter++'>+</button>
+    <button @click='counter--'>-</button>
+    <p></p>
+    <button v-on:click='add'>add</button>
+    <button @click='sub'>sub</button>
+  </div>
+
+  <script>
+    const obj = {
+      tab: 'show',
+      title: '第9-10课 Vue生命周期、钩子',
+      counter: 0
+    };
+    const app = new Vue({
+      el: '#app',
+      data: obj,
+      methods: {
+        add: function () {
+          this.counter++;
+        },
+        sub: function () {
+          this.counter--;
+        }
+      },
+      beforeCreate() {
+        console.log('beforeCreate');
+      },
+      created: function () {
+        console.log('created');
+      },
+      beforeMount() {
+        console.log('beforeMount');
+      },
+      mounted() {
+        console.log('mounted');
+      },
+      beforeUpdate() {
+        console.log('beforeUpdate');
+      },
+      updated() {
+        console.log('updated');
+      },
+      beforeDestroy() {
+        console.log('befoerDistory');
+      },
+      destroyed() {
+        console.log('distoryed');
+      },
+    })
+  </script>
+</body>
+
+</html>

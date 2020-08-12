@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue</title>
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+
+    .title {
+      font-weight: 800;
+    }
+
+    .red {
+      color: red;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app" v-cloak>
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>第13-19课 差值操作&动态绑定属性</q-toolbar-title>
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6 text-secondary">{{ title }}</div>
+              <p>
+                <div class="text-h6">差值操作</div><br />
+                'v-once数据只在第一次渲染，之后不再做改变',<br />
+                'v-html把数据解析成html再展示',<br />
+                'v-text把数据按照文本来展示',<br />
+                'v-pre把数据不解析原样展示',<br />
+                'v-cloak斗篷，再vue解析之前存在，解析之后不存在',<br />
+              </p>
+              <p>
+                <div class="text-h6">动态绑定属性</div><br />
+                'v-bind动态绑定属性+class属性',<br />
+                'v-bind动态绑定属性style（对象&数组）',<br />
+              </p>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+                  <p v-once>{{ vonce }}</p>
+                  <p>{{ vhtml }}</p>
+                  <p v-html="vhtml"></p>
+                  <p v-text="vtext"></p>
+                  <p v-pre="vpre">{{ vpre }}</p>
+
+                  <!-- v-bind动态绑定属性 -->
+                  <p class="title" v-bind:class="vbind">v-bind动态绑定属性</p>
+                  <p :class="vbind">v-bind语法糖（简写）</p>
+                  <p :class="{red: false}">v-bind语法class插入对象，{类名：布尔值，类名：布尔值}</p>
+                  <p :class="{red: isRed}">v-bind语法</p>
+                  <p v-bind:class="getClass()">v-bind语法用方法调取对象</p>
+                  <button @click="btnColor">v-bind的class切换</button>
+                  <p class="title" :class="['active','line',vbind]">v-bind语法class插入数组</p>
+
+                  <!-- <p :class="{key(属性名):value(属性值)}">233</p> -->
+                  <!-- 50px必须加单引号，否则会被当做变量解析 -->
+                  <!-- <p :style="{fontSize: '50px'}">v-bind+style</p> -->
+                  <!-- finalSize当做变量使用 -->
+                  <p :style="{fontSize: finalSize + 'px',color: finalColor}">v-bind+style</p>
+                  <!-- v-bind动态绑定style数组语法 -->
+                  <p :style="[baseStyle,baseStyle1]">v-bind+style</p>
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+&lt;div id=&quot;app&quot; v-cloak&gt;
+  &lt;p v-once&gt;{{ vonce }}&lt;/p&gt;
+  &lt;p&gt;{{ vhtml }}&lt;/p&gt;
+  &lt;p v-html=&quot;vhtml&quot;&gt;&lt;/p&gt;
+  &lt;p v-text=&quot;vtext&quot;&gt;&lt;/p&gt;
+  &lt;p v-pre=&quot;vpre&quot;&gt;{{ vpre }}&lt;/p&gt;
+
+  &lt;!-- v-bind动态绑定属性 --&gt;
+  &lt;p class=&quot;title&quot; v-bind:class=&quot;vbind&quot;&gt;v-bind动态绑定属性&lt;/p&gt;
+  &lt;p :class=&quot;vbind&quot;&gt;v-bind语法糖（简写）&lt;/p&gt;
+  &lt;p :class=&quot;{red: false}&quot;&gt;v-bind语法class插入对象，{类名：布尔值，类名：布尔值}&lt;/p&gt;
+  &lt;p :class=&quot;{red: isRed}&quot;&gt;v-bind语法&lt;/p&gt;
+  &lt;p v-bind:class=&quot;getClass()&quot;&gt;v-bind语法用方法调取对象&lt;/p&gt;
+  &lt;button @click=&quot;btnColor&quot;&gt;v-bind的class切换&lt;/button&gt;
+  &lt;p class=&quot;title&quot; :class=&quot;[&#x27;active&#x27;,&#x27;line&#x27;,vbind]&quot;&gt;v-bind语法class插入数组&lt;/p&gt;
+
+  &lt;!-- &lt;p :class=&quot;{key(属性名):value(属性值)}&quot;&gt;233&lt;/p&gt; --&gt;
+  &lt;!-- 50px必须加单引号，否则会被当做变量解析 --&gt;
+  &lt;!-- &lt;p :style=&quot;{fontSize: &#x27;50px&#x27;}&quot;&gt;v-bind+style&lt;/p&gt; --&gt;
+  &lt;!-- finalSize当做变量使用 --&gt;
+  &lt;p :style=&quot;{fontSize: finalSize + &#x27;px&#x27;,color: finalColor}&quot;&gt;v-bind+style&lt;/p&gt;
+  &lt;!-- v-bind动态绑定style数组语法 --&gt;
+  &lt;p :style=&quot;[baseStyle,baseStyle1]&quot;&gt;v-bind+style&lt;/p&gt;
+
+&lt;/div&gt;
+
+&lt;script src=&quot;../common/js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+  const app = new Vue({
+    el: &#x27;#app&#x27;,
+    data: {
+      title: &#x27;第13-19课 差值操作&amp;动态绑定属性&#x27;,
+      messages: [
+        &#x27;v-once数据只在第一次渲染，之后不再做改变&#x27;,
+        &#x27;v-html把数据解析成html再展示&#x27;,
+        &#x27;v-text把数据按照文本来展示&#x27;,
+        &#x27;v-pre把数据不解析原样展示&#x27;,
+        &#x27;v-cloak斗篷，再vue解析之前存在，解析之后不存在&#x27;,
+        &#x27;v-bind动态绑定属性+class属性&#x27;,
+        &#x27;v-bind动态绑定属性style（对象&amp;数组）&#x27;,
+      ],
+      vonce: &#x27;vonce&#x27;,
+      vhtml: &#x27;&lt;a href=&quot;https://www.zhihu.com/explore&quot;&gt;zhihu&lt;/a&gt;&#x27;,
+      vtext: &#x27;vtext&#x27;,
+      vpre: &#x27;vpre&#x27;,
+      vbind: &#x27;red&#x27;,
+      isRed: true,
+
+      finalSize: &#x27;40&#x27;,
+      finalColor: &#x27;red&#x27;,
+
+      baseStyle: {
+        backgroundColor: &#x27;red&#x27;
+      },
+      baseStyle1: {
+        fontSize: &#x27;50px&#x27;
+      }
+    },
+    methods: {
+      btnColor: function () {
+        this.isRed = !this.isRed;
+      },
+      getClass: function () {
+        return {
+          red: this.isRed
+        };
+      }
+    },
+  });
+  app.vonce = &#x27;123&#x27;;
+&lt;/script&gt;
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+
+    </template>
+  </div>
+
+  <script type="text/javascript">
+    const app = new Vue({
+      el: '#app',
+      data: {
+        tab: 'show',
+        title: '第13-19课 差值操作&动态绑定属性',
+        messages: [
+          'v-once数据只在第一次渲染，之后不再做改变',
+          'v-html把数据解析成html再展示',
+          'v-text把数据按照文本来展示',
+          'v-pre把数据不解析原样展示',
+          'v-cloak斗篷，再vue解析之前存在，解析之后不存在',
+          'v-bind动态绑定属性+class属性',
+          'v-bind动态绑定属性style（对象&数组）',
+        ],
+        vonce: 'vonce',
+        vhtml: '<a href="https://www.zhihu.com/explore">zhihu</a>',
+        vtext: 'vtext',
+        vpre: 'vpre',
+        vbind: 'red',
+        isRed: true,
+
+        finalSize: '40',
+        finalColor: 'red',
+
+        baseStyle: {
+          backgroundColor: 'red'
+        },
+        baseStyle1: {
+          fontSize: '50px'
+        }
+      },
+      methods: {
+        btnColor: function () {
+          this.isRed = !this.isRed;
+        },
+        getClass: function () {
+          return {
+            red: this.isRed
+          };
+        }
+      },
+    });
+    app.vonce = '123';
+  </script>
+</body>
+
+</html>

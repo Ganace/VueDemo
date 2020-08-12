@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vue练习</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>第82-89课</q-toolbar-title>
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section class="text-secondary">
+              <div class="text-h6 text-secondary">{{ title }}</div>
+              <h6>webpack使用Vue的配置</h6>
+              <ul>
+                <li>因为我们后续是在实际项目中也会使用vue，所以并不是开发时依赖</li>
+                <li>1.安装：<code>npm install vue --save</code></li>
+                <li>2.修改webpack.config.js配置：
+                  <pre>
+module.exports = {
+  // ...
+  resolve: {
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js' // 用 webpack 1 时需用 'vue/dist/vue.common.js'
+    }
+  }
+}
+                  </pre>
+                </li>
+                <li>使用：<code>import Vue from 'vue'</code></li>
+                <li>
+                  vue有两个版本
+                  <ul>
+                    <li>1.runtime-only ->代码中不可以有任何的template</li>
+                    <li>2.runtime-compiler -> 代码中，可以有template，因为有compiler可以用于编译template</li>
+                  </ul>
+                </li>
+                <li>单页Web应用（single page web application，SPA）</li>
+              </ul>
+              <h6>.vue文件封装处理</h6>
+              <ul>
+                <li><code>npm install vue-loader vue-template-compiler --save-dev</code></li>
+                <li>
+                  修改webpack.config.js配置
+                  <pre>
+{
+test: /\.vue/,
+use: ['vue-loader']
+}
+                </pre>
+                </li>
+                <li>
+                  Vue-loader在15.*之后的版本都是 vue-loader的使用都是需要伴生 VueLoaderPlugin的
+                  <code>npm i --save-dev vue-loader-plugin</code>
+                  <pre>
+// webpack.config.js
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+
+module.exports = {
+module: {
+rules: [
+  // ... other rules
+  {
+    test: /\.vue$/,
+    loader: 'vue-loader'
+  }
+]
+},
+plugins: [
+// make sure to include the plugin!
+new VueLoaderPlugin()
+]
+}
+                  </pre>
+                </li>
+              </ul>
+              <h6>webpack-横幅Plugin的使用</h6>
+              <ul>
+                <li>BannerPlugin,属于webpack自带的插件</li>
+                <li>
+                  修改webpack.config.js配置
+                  <pre>
+const path = require('path')
+const webpack = require('webpack')
+module.exports = {
+  // ... 
+  plugins: [
+    new webpack.BannerPlugin('最终版权归Ganace所有')
+  ]
+}
+                  </pre>
+                </li>
+              </ul>
+              <h6>webpack-HtmlWebpackPlugin的使用</h6>
+              <ul>
+                <li>在dist文件中生成index.html</li>
+                <li>安装 <code>npm install html-webpack-plugin --save-dev</code></li>
+                <li>
+                  修改webpack.config.js配置
+                  <pre>
+module.exports = {
+  // ... 
+  plugins: [
+    new htmlWebpackPlugin({
+      template: 'index.html'
+    })
+  ]
+}
+                  </pre>
+                </li>
+              </ul>
+              <h6>webpack-UglifyjsWebpackPlugin的使用</h6>
+              <ul>
+                <li>用于对js进行压缩</li>
+                <li>安装：<code>npm install uglifyjs-webpack-plugin --save-dev</code></li>
+                <li>
+                  webpack.config.js配置
+                  <pre>
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+
+module.exports = {
+  plugins: [
+    new UglifyJsPlugin()
+  ]
+}
+                  </pre>
+                </li>
+              </ul>
+              <h6>webpack-dev-server搭建本地服务器</h6>
+              <ul>
+                <li>基于node.js搭建，内部使用express，实现浏览器自动刷新显示我们修改后的效果</li>
+                <li>需要先安装：<code>npm install --save-dev webpack-dev-server</code></li>
+                <li>
+                  webpack.config.js配置
+                  <pre>
+module.exports = {
+  devServer: {
+    contentBase: './dist', //为哪个文件夹提供本地服务，默认是根文件夹
+    port: 9805, //端口号
+    inline: true, //页面实时刷新
+  }
+}
+                  </pre>
+                </li>
+                <li>
+                  package.json配置scripts
+                  <pre>
+"scripts": {
+  "dev": "webpack-dev-server --open"
+},
+                  </pre>
+                </li>
+              </ul>
+              <h6>webpack配置文件的分离</h6>
+              <ul>
+                <li>安装：<code>npm install webpack-merge --save-dev</code></li>
+                <li>
+                  新建build文件,在build文件夹下新建三个配置文件：
+                  <ul>
+                    <li>base.config.js存放生产版本与开发版本共同使用的配置</li>
+                    <li>prod.config.js存放只有生产版本需要使用的配置</li>
+                    <li>dev.config.js存放只有开发版本需要使用的配置</li>
+                  </ul>
+                </li>
+                <li>
+                  分离后的生产用config文件，prod.config.js文件中，设置base.config.js与prod.config.js文件的配置合并
+                  <pre>
+const webpackMerge = require('webpack-merge')
+const baseConfig = require('./base.config')
+
+module.exports = webpackMerge(baseConfig,{
+  plugins: [
+    new UglifyJsPlugin()
+  ]
+})
+                  </pre>
+                </li>
+                <li>
+                  dev.config.js文件
+                  <pre>
+const webpackMerge = require('webpack-merge')
+const baseConfig = require('./base.config')
+
+module.exports = webpackMerge(baseConfig,{
+  devServer: {
+    contentBase: './dist', //为哪个文件夹提供本地服务，默认是根文件夹
+    port: 9805, //端口号,默认8080
+    inline: true, //页面实时刷新
+  },
+})
+                  </pre>
+                </li>
+              </ul>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="show">
+                <div class="text-h6">
+                  123
+                </div>
+              </q-tab-panel>
+
+              <q-tab-panel name="code">
+                <pre v-pre class="text-weight-medium bg-green-2">
+&lt;script src=&quot;../common/js/vue.js&quot;&gt;&lt;/script&gt;
+&lt;div id=&quot;app&quot;&gt;
+                </pre>
+              </q-tab-panel>
+            </q-tab-panels>
+          </q-card>
+        </div>
+      </div>
+    </template>
+  </div>
+  <script type="text/javascript">
+    const app = new Vue({
+      el: '#app',
+      data: {
+        tab: 'show',
+        title: '第82-89课 webpack使用Vue的配置',
+        messages: [
+          '',
+        ],
+      }
+    });
+  </script>
+</body>
+
+</html>
