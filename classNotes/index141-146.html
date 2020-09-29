@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Vue练习</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../common/css/style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet"
+    type="text/css">
+  <link href="../common/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script src="../common/js/vue.js"></script>
+  <script src="../common/quasar/quasar.umd.min.js"></script>
+  <!-- menu菜单按钮 -->
+  <!-- <btn-menu></btn-menu> -->
+  <template id="BtnMenu">
+    <div>
+      <q-btn-group push>
+        <q-btn onclick="location.href='/index.html'" flat class="text-white bg-info" label="HOME"></q-btn>
+        <q-btn color="secondary" label="Menu">
+          <q-menu auto-close>
+            <q-list style="min-width: 100px">
+              <q-item clickable v-for="(m,index) in menus" :key="index">
+                <q-item-section>
+                  <a :href="st+m.url">
+                    <div>
+                      <span class="text-secondary">{{ m.title }}</span>
+                      <span>{{ m.message }}</span>
+                    </div>
+                  </a>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </q-btn-group>
+    </div>
+  </template>
+  <script type="text/javascript" src="./menu.js"></script>
+  <div id="app">
+    <template>
+      <div class="q-pa-md">
+        <q-toolbar class="bg-secondary text-white shadow-2">
+          <q-toolbar-title>{{ title }}</q-toolbar-title>
+          </q-toolbar-title>
+          <btn-menu></btn-menu>
+        </q-toolbar>
+        <div class="q-gutter-y-md" style="width: 100%;">
+          <q-card>
+            <q-card-section class="text-secondary">
+              <div class="text-h6 text-secondary">{{ title }}</div>
+              <h6>网络请求模块的选择-axios</h6>
+              <ul>
+                <li>Vue发送网络请求各种方式与选择：</li>
+                <li>选择一:传统的Ajax是基于XMLHTTPRequest(XHR)</li>
+                <li>为什么不用它：配置和调用非常混乱，编码看起来非常复杂，所以真实开发中很少直接使用，而是直接使用jQuery-Ajax</li>
+                <li>选择二：jQuery-ajax : 相对于传统的ajax非常好用</li>
+                <li>为什么不选择它：Vue在整个开发过程中都不需要jQuery，完全没有必要为了网络请求就引用jQuery这个重量级的框架</li>
+                <li>选择三：Vue1.x时官方推出的Vue-resource ：体积相对jQuery小很多，官方推出</li>
+                <li>为什么不选择它：V2.0推出后，官方不再更新Vue-resource，它不再支持新版本，也不会继续更新和维护，对以后的项目开发和维护存在很大隐患</li>
+                <li>选择四：axios ：vue作者推荐，axios有非常多的优点，用起来也非常方便</li>
+              </ul>
+              <h6>axios框架的基本使用</h6>
+              <ul>
+                <li>安装：<code>npm install axios --save</code></li>
+                <li>axios(config)</li>
+                <li>axios.request(config)</li>
+                <li>axios.get(url,config)</li>
+                <li>axios.delete(url,config)</li>
+                <li>axios.head(url,config)</li>
+                <li>axios.post(url,data,config)</li>
+                <li>axios.put(url,data,config)</li>
+                <li>axios.patch(url,data,config)</li>
+              </ul>
+              <h6>axios发送并发请求</h6>
+              <ul>
+                <li>
+                  <pre>
+axios.all([axios({
+  url: &#x27;http://127.0.0.1:5500/data/mutidata.json&#x27;
+}), axios({
+  url: &#x27;http://127.0.0.1:5500/data/goods.json&#x27;,
+  method: &#x27;get&#x27;,
+  params: {
+    pageSize: 10,
+    page: 1,
+    alias: &#x27;nm8nwc9e1&#x27;,
+    offlineId: 0,
+    json: 1
+  }
+})]).then(results =&gt; {
+  console.log(&#x27;axios.all([]).then()&#x27;,results);
+})
+                  </pre>
+                </li>
+              </ul>
+              <h6>axios配置信息相关</h6>
+              <ul>
+                <li>
+                  <pre>
+axios.defaults.baseURL = &#x27;http://127.0.0.1:5500&#x27;
+axios.defaults.timeout = 5000
+axios({
+  url: &#x27;/data/goods.json&#x27;
+}).then( res =&gt; {
+  console.log(&#x27;goods&#x27;, res)
+})
+                  </pre>
+                </li>
+                <li>
+                  常见配置选项
+                  <ul>
+                    <li>请求类型</li>
+                    <li>url: '/user',</li>
+                    <li>请求类型</li>
+                    <li>method: 'get',</li>
+                    <li>请求地址根路径</li>
+                    <li>baseUrl: 'http://127.0.0.1:5500/data',</li>
+                    <li>请求前的数据处理</li>
+                    <li>transformResquest: [function(data)],</li>
+                    <li>请求后的数据处理</li>
+                    <li>transformResponse: [function(data)],</li>
+                    <li>自定义请求头</li>
+                    <li>headers:{'x-Requested-With':'XMLHttpRequest'},</li>
+                    <li>URL查询对象</li>
+                    <li>params:{id: 12},</li>
+                    <li>...</li>
+                  </ul>
+                </li>
+              </ul>
+              <h6>axios的实例和模块封装</h6>
+              <ul>
+                <li>
+                  新建文件：src\network\request.js
+                  <pre>
+import axios from &#x27;axios&#x27;
+
+// 方法四：（推荐方法）
+export function request(config) {
+  // 1.创建axios实例
+  const instance = axios.create({
+    baseURL: &#x27;http://127.0.0.1:5500&#x27;,
+    timeout: 5000
+  })
+  return instance(config)
+}
+                  </pre>
+                </li>
+                <li>
+                  使用封装好的request
+                  <pre>
+import { request } from &quot;./network/request&quot;
+
+// 方法三，方法四，使用
+request({
+  url: &#x27;/data/goods.json&#x27;
+}).then(res =&gt; {
+  console.log(res)
+}).catch(err =&gt; {
+  console.log(err)
+})
+                  </pre>
+                </li>
+              </ul>
+              <h6>axios的拦截器的使用</h6>
+            </q-card-section>
+            <q-tabs v-model="tab" dense class="text-grey" active-color="secondary" indicator-color="secondary"
+              align="justify" narrow-indicator>
+              <q-tab name="show" label="SHOW"></q-tab>
+              <q-tab name="code" label="CODE"></q-tab>
+            </q-tabs>
+
+            <q-separator></q-separator>
+          </q-card>
+        </div>
+      </div>
+    </template>
+  </div>
+  <script type="text/javascript">
+    const app = new Vue({
+      el: '#app',
+      data: {
+        tab: 'show',
+        title: '第141-146课 axios[基本使用，发送并发请求，配置信息，实例和封装模块，拦截器]',
+        messages: [
+          '',
+        ],
+      }
+    });
+  </script>
+</body>
+
+</html>

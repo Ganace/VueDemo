@@ -183,9 +183,9 @@ Vue.component('btn-menu', {
           },
           {
             id: 28,
-            title: '第课',
-            message: '',
-            url: 'index.html'
+            title: '第141-146课',
+            message: '第141-146课 axios[基本使用，发送并发请求，配置信息，实例和封装模块，拦截器]',
+            url: 'index141-146.html'
           },
           {
             id: 29,
