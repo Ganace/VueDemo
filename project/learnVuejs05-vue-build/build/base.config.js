@@ -1,7 +1,6 @@
 //node包拼接绝对路径path.resolve(__dirname,'dist')
 const path = require('path')
 const webpack = require('webpack')
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const htmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
@@ -68,22 +67,13 @@ module.exports = {
           }
         }
       },
-      {
-        test: /\.vue$/,
-        use: ['vue-loader']
-      },
     ]
   },
   resolve: {
     // 允许省略的文件后缀名
-    extensions: ['.js', '.css', '.vue'],
-    // alias别名
-    alias: {
-      'vue$': 'vue/dist/vue.esm.js' // 用 webpack 1 时需用 'vue/dist/vue.common.js'
-    }
+    extensions: ['.js', '.css'],
   },
   plugins: [
-    new VueLoaderPlugin(),
     new webpack.BannerPlugin('最终版权归Ganace所有'),
     new htmlWebpackPlugin({
       template: 'index.html'
